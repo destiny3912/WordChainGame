@@ -15,15 +15,77 @@ public class login extends JFrame{
 		mainWindow.setSize(500, 400);
 		mainWindow.setTitle("Login");
 		mainWindow.setDefaultCloseOperation(HIDE_ON_CLOSE);
-		mainWindow.setLayout(new FlowLayout());
+		mainWindow.setLayout(new GridLayout(3,1));
+		mainWindow.setResizable(false);
 		
-		JButton Enter = new JButton("Enter");
-		mainWindow.add(Enter);
+		JPanel DescriptionPane = new JPanel();
+		DescriptionPane.setSize(500, 200);
+		JPanel textFeildPane = new JPanel();
 		
-		/*
-		 * Enter 버튼을 누르면 대기 화면으로 넘어가게 세팅했습니다.
-		 * */
-		Enter.addActionListener(new ActionListener() {
+		textFeildPane.setLayout(new GridLayout(2,2));
+		textFeildPane.setSize(500, 100);
+		JPanel buttonPane = new JPanel();
+		buttonPane.setLayout(new FlowLayout());
+		buttonPane.setSize(500, 100);
+		
+		mainWindow.add(DescriptionPane);
+		mainWindow.add(textFeildPane);
+		mainWindow.add(buttonPane);
+		
+		JLabel DesText = new JLabel("Word chain game");
+		JLabel IDText = new JLabel("ID : ");
+		JLabel PWText = new JLabel("PW : ");
+		DesText.setHorizontalAlignment(JLabel.CENTER);
+		
+		DescriptionPane.add(DesText);
+		
+		JPanel IDPane = new JPanel();
+		JPanel PWPane = new JPanel();
+		IDPane.setSize(250,10);
+		PWPane.setSize(250,10);
+		
+		IDPane.setLayout(new FlowLayout());
+		PWPane.setLayout(new FlowLayout());
+		
+		JTextField ID = new JTextField("ID");
+		JTextField PW = new JTextField("PW");
+		ID.setColumns(12);
+		PW.setColumns(12);
+		IDPane.add(IDText);
+		IDPane.add(ID);
+		PWPane.add(PWText);
+		PWPane.add(PW);
+		
+		textFeildPane.add(IDPane);
+		textFeildPane.add(PWPane);
+		
+		ID.revalidate();
+		ID.repaint();
+		PW.revalidate();
+		PW.repaint();
+		
+		JButton Register = new JButton("Registrer");
+		buttonPane.add(Register);
+		Register.revalidate();
+		Register.repaint();
+		
+		JButton Login = new JButton("Login");
+		buttonPane.add(Login);
+		Login.revalidate();
+		Login.repaint();
+		
+		Register.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				register registerSection = new register();
+				
+				registerSection.setWindow();
+				mainWindow.dispose();
+			}
+		});
+		Login.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
