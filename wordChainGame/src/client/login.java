@@ -18,6 +18,7 @@ public class login extends JFrame{
 		mainWindow.setLayout(new GridLayout(3,1));
 		mainWindow.setResizable(false);
 		
+		//Header
 		JPanel DescriptionPane = new JPanel();
 		DescriptionPane.setSize(500, 200);
 		JPanel textFeildPane = new JPanel();
@@ -39,6 +40,7 @@ public class login extends JFrame{
 		
 		DescriptionPane.add(DesText);
 		
+		//Center -> input id and pw textField
 		JPanel IDPane = new JPanel();
 		JPanel PWPane = new JPanel();
 		IDPane.setSize(250,10);
@@ -64,6 +66,7 @@ public class login extends JFrame{
 		PW.revalidate();
 		PW.repaint();
 		
+		//Footer
 		JButton Register = new JButton("Registrer");
 		buttonPane.add(Register);
 		Register.revalidate();
