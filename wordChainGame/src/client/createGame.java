@@ -16,6 +16,7 @@ public class createGame extends JFrame{
 		mainWindow.setTitle("Waiting");
 		mainWindow.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		mainWindow.setLayout(new BorderLayout());
+		mainWindow.setResizable(false);
 		
 		JPanel userNamePane = new JPanel();
 		JPanel buttonPane = new JPanel();
