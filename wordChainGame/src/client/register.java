@@ -53,5 +53,5 @@ public class register extends JFrame{
 		// TODO Auto-generated method stub
 
 	}
-
+	
 }
