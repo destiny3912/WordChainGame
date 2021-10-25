@@ -1,5 +1,7 @@
 package client;
-
+/*
+ * 좌측에 접속유저 우측에 랭킹을 표시하고 중앙에 채팅창을 만들어 두었습니다.
+ * */
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -44,6 +46,7 @@ public class waiting extends JFrame{
 		userList.setEditable(false);
 		userList.setColumns(20);
 		userList.setRows(50);
+		//채팅창
 		JTextArea chatBox = new JTextArea();
 		chatBox.setEditable(false);
 		chatBox.setColumns(50);
@@ -52,8 +55,11 @@ public class waiting extends JFrame{
 		ranking.setEditable(false);
 		ranking.setColumns(20);
 		ranking.setRows(50);
+		//채팅 작성창
 		JTextField chat = new JTextField();
+		//채팅 전송 버튼
 		JButton chatSubmit = new JButton("Submit");
+		//게임 room을 만드는 버튼 -> createGame class의 기능을 실행하기위한 트리거
 		JButton createGame = new JButton("Make room");
 		
 		descriptionPane.add(description, BorderLayout.NORTH);
