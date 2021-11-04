@@ -3,12 +3,19 @@ package client;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.*;
 
-public class login extends JFrame{
+public class login extends CFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
 	
+	public login(BufferedWriter bw, BufferedReader br) {
+		// TODO Auto-generated constructor stub
+		super.bw = bw;
+		super.br = br;
+	}
+
 	public void setWindow()
 	{
 		mainWindow.setVisible(true);
@@ -88,17 +95,36 @@ public class login extends JFrame{
 				mainWindow.dispose();
 			}
 		});
-		Login.addActionListener(new ActionListener() {
-			
+
+		Login.addActionListener(new CActionListener(super.bw, super.br) {
+
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				waiting waitingSection = new waiting();
+				String result = "";
+				String id;
+				do {
+
+					id = ID.getText();					
+					try {
+						bw.write(id + "\n");
+						bw.flush();
+						result = br.readLine();
+					}
+					catch (Exception ex) {
+						ex.printStackTrace();
+					}
+					
+				} while (!result.equals("ok"));
+				
+				waiting waitingSection = new waiting(super.bw, super.br);
 				
 				waitingSection.setWindow();
 				mainWindow.dispose();
+				
 			}
 		});
+		
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

@@ -4,14 +4,23 @@ package client;
  * */
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 import javax.swing.*;
 
-public class waiting extends JFrame{
+public class waiting extends CFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
-	private String userName = "Test";
 	
+	public waiting(BufferedWriter bw, BufferedReader br) {
+		// TODO Auto-generated constructor stub
+		super.bw = bw;
+		super.br = br;
+	}
+
 	public void setWindow()
 	{
 		mainWindow.setVisible(true);
@@ -73,7 +82,12 @@ public class waiting extends JFrame{
 		chatPane.add(chatSubmit);
 		chatPane.add(createGame);
 		
-		chatSubmit.addActionListener(new ActionListener(){
+		ClientCore client = new ClientCore(bw, br);
+		client.setChatBox(chatBox);
+		client.setUserList(userList);
+		client.start();
+	
+		chatSubmit.addActionListener(new CActionListener(super.bw, super.br) {
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -81,7 +95,15 @@ public class waiting extends JFrame{
 				String chatData;
 				chatData = chat.getText();
 				chat.setText("");
-				chatBox.append(userName + " : " + chatData + "\n");
+				//chatBox.append(userName + " : " + chatData + "\n");
+				
+				try {
+					bw.write(chatData + "\n");
+					bw.flush();
+				}
+				catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 			
 		});
@@ -98,6 +120,7 @@ public class waiting extends JFrame{
 			}
 			
 		});
+		
 	}
 	
 	public static void main(String[] args) {
