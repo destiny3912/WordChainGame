@@ -1,7 +1,5 @@
-package client;
+package server;
 import java.util.ArrayList;
-
-import server.Server;
 
 public class ChatRoom {
 	ArrayList<Server> list = new ArrayList<Server>();

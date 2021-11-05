@@ -2,14 +2,48 @@ package client;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
 import javax.swing.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class game extends JFrame{
+public class game extends CFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
 	private String[] users = {"bundang", "coolj"};
+//	private Socket player;
+	private String playerName;
+	private String prevWord = null;
+	private int isWin = 1;
+	private int isMyturn = 0;
 	
+	private JLabel timer = new JLabel("10초 남음");
+	private JTextArea textForm = new JTextArea(50, 100);
+	private JTextArea msgForm = new JTextArea(1, 40);//입력창
+	private JPanel headerPanel = new JPanel();
+	private JPanel contentPanel = new JPanel();
+	private JPanel contentResultPanel = new JPanel();
+	private JPanel btnPanel = new JPanel();
+	private JPanel footerPanel = new JPanel();
+	private JButton exitBtn = new JButton("종료");
+	private JButton Return = new JButton("대기실로");//Return 버튼
+	private JButton sendBtn = new JButton("전송");
+	private JLabel resultTitle = new JLabel("");
+	private JLabel resultContent = new JLabel("");
+	
+	public game(BufferedWriter bw, BufferedReader br)
+	{
+		super.bw = bw;
+		super.br = br;
+	}
+
 	public void setWindow()
 	{
 		mainWindow.setVisible(true);
@@ -19,7 +53,7 @@ public class game extends JFrame{
 		mainWindow.setLayout(new BorderLayout());//(3, 1));
 		
 		// Header		
-		JPanel headerPanel = new JPanel();
+		
 		headerPanel.setLayout(new GridLayout(1, 3));
 		
 		JPanel titlePanel = new JPanel();
@@ -35,63 +69,55 @@ public class game extends JFrame{
 		titlePanel.add(title);
 		
 		// 전적
-		JLabel record = new JLabel("(3승 1패 1무) (1승 1패 0무)");
+		JLabel record = new JLabel("전적 : ");
 		record.setFont(new Font("맑은 고딕", Font.BOLD, 12));
 		record.setHorizontalAlignment(SwingConstants.CENTER);
 		titlePanel.add(record);
 		headerPanel.add(titlePanel);
 		
 		// Timer
-		JLabel timer = new JLabel("3초 남음");
 		timer.setHorizontalAlignment(SwingConstants.CENTER);
 		timer.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		headerPanel.add(timer);
+	
 		
-		JButton Return = new JButton("대기실로");//Return 버튼
 		returnPanel.add(Return);
 		headerPanel.add(returnPanel);
 		
 		// Content
-		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(new FlowLayout());
-		JTextArea textForm = new JTextArea(50, 100);
 		textForm.setBackground(Color.WHITE);
 		textForm.setEditable(false);
-		textForm.setText("[bundang] 김치\n[coolj] 치약\n[bundang] 약술\n");
+		textForm.setText("단어를 입력해주세요\n");
 		contentPanel.add(textForm);
 		
 		// Content -- Result
-		JPanel contentResultPanel = new JPanel();
+		
 		contentResultPanel.setLayout(new GridLayout(3, 1));
-		JLabel resultTitle = new JLabel("패배!");
+		
 		resultTitle.setVerticalAlignment(SwingConstants.BOTTOM);
 		resultTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		resultTitle.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		contentResultPanel.add(resultTitle);
 		
-		JLabel resultContent = new JLabel("cooj님이 이겼습니다!");
+		
 		resultContent.setVerticalAlignment(SwingConstants.TOP);
 		resultContent.setHorizontalAlignment(SwingConstants.CENTER);
 		resultContent.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		contentResultPanel.add(resultContent);
 		
-		JPanel btnPanel = new JPanel();
+		
 		btnPanel.setLayout(new FlowLayout());
-
-		JButton exitBtn = new JButton("종료");
 		contentResultPanel.add(btnPanel);
 		
 		// Footer		
-		JPanel footerPanel = new JPanel();
 		footerPanel.setLayout(new FlowLayout());
 		
-		JTextArea msgForm = new JTextArea(1, 40);
 		msgForm.setBackground(Color.WHITE);
 		footerPanel.add(msgForm);
 		
-		JButton sendBtn = new JButton("전송");
-		footerPanel.add(sendBtn);
 		
+		footerPanel.add(sendBtn);
 		
 		mainWindow.add(headerPanel, BorderLayout.NORTH);
 		mainWindow.add(contentPanel, BorderLayout.CENTER);
@@ -101,34 +127,140 @@ public class game extends JFrame{
 		 * Return버튼을 누르면 대기화면으로 돌아가게 세팅해두었습니다.
 		 * 
 		 * */
-		Return.addActionListener(new ActionListener() {
+		Return.addActionListener(new CActionListener(super.bw, super.br) {
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				waiting waitingSection = new waiting();
+				waiting waitingSection = new waiting(super.bw, super.br);
 				
 				waitingSection.setWindow();
 				mainWindow.dispose();
 			}
 		});
 		
-		/* 게임 결과창을 확인할 수 있게, sendBtn을 누르면 무조건 패배하도록 임시로 세팅해두었습니다. */
-		sendBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e)
+		new gameClientReceiveThread(br).start();
+		//turnProgress();
+	}
+	
+	private void sendMsg(String msg, String labelName)
+	{
+		try {
+			String req = labelName + ":" + msg + "\n";
+			bw.write(req);
+			bw.flush();
+		}catch(IOException IOe) {
+			
+		}
+	}
+	
+	private class gameClientReceiveThread extends Thread
+	{
+		BufferedReader br;
+		
+		gameClientReceiveThread(BufferedReader br){
+			this.br = br;
+		}
+		
+		public void run() {
+			try {				
+				while(true) {
+					String msg = br.readLine();
+					
+					String[] tokens = msg.split(":");
+					
+					if("end".equalsIgnoreCase(msg)) {
+						btnPanel.add(Return);	// Return button moves to contentResultPanel--btnPanel from headerPanel--returnPanel
+						btnPanel.add(exitBtn);
+						
+						if(isWin == 1)
+						{
+							resultTitle.setText("승리");
+							sendMsg("iWin:" + playerName, "iWin");
+						}
+						else
+						{
+							resultTitle.setText("패배");
+						}
+						
+						headerPanel.remove(timer);				
+						mainWindow.remove(contentPanel);
+						mainWindow.remove(footerPanel);
+						mainWindow.add(contentResultPanel, BorderLayout.CENTER);
+						SwingUtilities.updateComponentTreeUI(mainWindow);	// Refresh mainWindow
+					}
+					else if("correct".equalsIgnoreCase(tokens[0]))
+					{
+						prevWord = tokens[1];
+						sendMsg("turnOver:" + playerName, "turnOver");
+					}
+					else if("wrong".equalsIgnoreCase(msg))
+					{
+						sendMsg("iLose:" + playerName, "iLose");
+						isWin = 0;
+					}
+					else if("isYourTurn".equalsIgnoreCase(msg))
+					{
+						if(isMyturn == 0)
+						{
+							isMyturn = 1;
+							turnProgress();
+						}
+						else if(isMyturn == 1)
+						{
+							isMyturn = 0;
+						}
+						
+					}
+				}
+			}catch(IOException e)
 			{
-				btnPanel.add(Return);	// Return button moves to contentResultPanel--btnPanel from headerPanel--returnPanel
-				btnPanel.add(exitBtn);
-				
-				headerPanel.remove(timer);				
-				mainWindow.remove(contentPanel);
-				mainWindow.remove(footerPanel);
-				mainWindow.add(contentResultPanel, BorderLayout.CENTER);
-				SwingUtilities.updateComponentTreeUI(mainWindow);	// Refresh mainWindow
-
+				e.printStackTrace();
 			}
-		});
+		}
+	}
+	
+	/*
+	 * 턴 진행 메서드
+	 * */
+	public void turnProgress()
+	{
+		Timer T = new Timer();
+		msgForm.setEnabled(true);
+		
+		T.scheduleAtFixedRate(new TimerTask() {
+			int i = 10;
+			
+			public void run() {
+				
+				timer.setText(i + "초 남음");
+				i--;
+				
+				sendBtn.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						T.cancel();
+						
+						msgForm.setEnabled(false);
+						timer.setText("");
+						String answer = msgForm.getText();
+						msgForm.setText("");
+						textForm.append(playerName + " : " + answer + ":" + prevWord + "\n");
+						sendMsg(answer, "answer");
+					}
+				});
+				
+				if(i < 0)
+				{
+					timer.setText("시간초과");
+					sendMsg("end", "end");
+					msgForm.setEnabled(false);
+					T.cancel();
+				}
+			}
+		}, 0, 1000);
 	}
 	
 	public static void main(String[] args) {

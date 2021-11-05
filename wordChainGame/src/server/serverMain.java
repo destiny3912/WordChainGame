@@ -7,8 +7,6 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 
-import client.ChatRoom;
-
 public class serverMain {
 	public static void main(String[] args) {
 		Socket socket = null;

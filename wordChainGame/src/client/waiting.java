@@ -108,15 +108,15 @@ public class waiting extends CFrame{
 			
 		});
 		
-		createGame.addActionListener(new ActionListener(){
+		createGame.addActionListener(new CActionListener(super.bw, super.br){
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				createGame creator = new createGame();
+				createGame creator = new createGame(super.bw, super.br);
 				
 				creator.setWindow();
-				mainWindow.dispose();
+				//mainWindow.dispose();
 			}
 			
 		});
