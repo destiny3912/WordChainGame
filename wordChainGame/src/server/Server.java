@@ -59,10 +59,6 @@ public class Server extends Thread {
 					server.start();
 					
 					chatRoom.exitRoom(this);
-					try {
-						br.close();
-						bw.close();
-					}catch(Exception e) { }
 					
 					gameRoom.enterRoom(server);
 					continue;
@@ -77,10 +73,6 @@ public class Server extends Thread {
 					server.start();
 					
 					chatRoom.exitRoom(this);
-					try {
-						br.close();
-						bw.close();
-					}catch(Exception e) { }
 					
 					roomList.get(roomNumber).enterRoom(server);
 					continue;
