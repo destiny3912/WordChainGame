@@ -3,4 +3,4 @@
 수정된 버그는 취소선을 긋거나 fix 했다고 적어주시면 감사하겠습니다.
 
 1. game 끝나고 wating 으로 들어갔을때 채팅이 기능하지 않는 현상 (20/11/05)
-2. game.java에서 276line 부터 있는 turnProgress 메서드에서 timer를 cancle 했음에도 계속해서 메세지를 보내는 현상 (20/11/10)(fixed 다만 방식이 좋지 않아 재수정 필요)
+2. game.java에서 276line 부터 있는 turnProgress 메서드에서 timer를 canc 했음에도 계속해서 메세지를 보내는 현상 (20/11/10)(fixed 다만 방식이 좋지 않아 재수정 필요)
