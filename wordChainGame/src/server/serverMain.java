@@ -27,6 +27,7 @@ public class serverMain {
 			serverSocket = new ServerSocket(portNumber);
 			System.out.println("[Server 준비 완료]");
 			System.out.println("[Game Server 대기]");
+			//game server 스레드 내보내기
 			GServer = new gameServer(roomList);
 			GServer.start();
 			

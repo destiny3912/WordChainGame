@@ -30,6 +30,7 @@ public class gameThreadServer extends Thread{
 	public gameThreadServer(Socket socket, gameRoom room)
 	{
 		this.socket = socket;
+		this.room = room;
 		
 		try {
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -52,7 +53,6 @@ public class gameThreadServer extends Thread{
 			while(true)
 			{
 				String req;
-				//String res;
 				
 				req = br.readLine();
 				System.out.println("Msg : " + req);
@@ -104,10 +104,6 @@ public class gameThreadServer extends Thread{
 					//1번과 2번 토큰에서 끝말잇기 성공하면 correct response
 					//틀렸다면 end response
 				}
-				/*else if("join".equalsIgnoreCase(tokens[0]))
-				{
-					joinGame(tokens[1], out);
-				}*/
 				else if("iWin".equalsIgnoreCase(tokens[0]))
 				{
 					String query;
@@ -128,24 +124,6 @@ public class gameThreadServer extends Thread{
 			System.out.println(this.strId + "님이 게임에서 나갔습니다.");
 		}
 	}
-	
-	/*private void quitGame(PrintWriter writer)
-	{
-		synchronized (writerList){
-			writerList.clear();
-		}
-		
-	}
-	
-	private void joinGame(String nickName, PrintWriter writer)
-	{
-		this.nickName = nickName;
-		
-		synchronized (writerList){
-			writerList.add(writer);
-		}
-	}*/
-	
 	
 	private void insertDB(String query)
 	{

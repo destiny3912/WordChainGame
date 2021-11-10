@@ -176,6 +176,7 @@ public class game extends CFrame{
 	{
 		try {
 			String req = labelName + ":" + msg + "\n";
+			System.out.println("Send : " + req);
 			bw.write(req);
 			bw.flush();
 		}catch(IOException IOe) {
@@ -279,6 +280,7 @@ public class game extends CFrame{
 		
 		T.scheduleAtFixedRate(new TimerTask() {
 			int i = 10;
+			int flag = 0;
 			
 			public void run() {
 				
@@ -290,14 +292,20 @@ public class game extends CFrame{
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
-						msgForm.setEnabled(false);
-						timer.setText("상대턴");
-						String answer = msgForm.getText();
-						msgForm.setText("");
-						textForm.append(playerName + " : " + answer + ":" + prevWord + "\n");
-						sendMsg(answer + ":" + prevWord, "answer");
-						prevWord = answer;
-						T.cancel();
+						if(flag == 0)
+						{
+							msgForm.setEnabled(false);
+							timer.setText("상대턴");
+							String answer = msgForm.getText();
+							msgForm.setText("");
+							textForm.append(playerName + " : " + answer + ":" + prevWord + "\n");
+							System.out.println(answer);
+							sendMsg(answer + ":" + prevWord, "answer");
+							prevWord = answer;
+							T.cancel();
+							flag = 1;
+						}
+						
 					}
 				});
 				

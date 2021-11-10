@@ -46,7 +46,5 @@ public class clientMain {
 		}
 		
 		loginSection.setWindow();
-
-		
 	}
 }
