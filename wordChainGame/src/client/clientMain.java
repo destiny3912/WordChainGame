@@ -13,6 +13,9 @@ import javax.swing.JFrame;
 /*
  * Client의 기능을 실행하는 실질 러너 클래스입니다.
  * 
+ * 방을 만드는 클라이언트는 createGame화면에서 createGameRoom 버튼을
+ * 만들어진 방에 들어간 클라이언트는 대화상자에 방 번호를 입력하고 enterRoom 버튼을 누르면 됩니다.
+ * 테스트시 방 번호는 0번 입니다.
  * */
 public class clientMain {
 	public static void main(String[] args) {
