@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.net.Socket;
 
 import javax.swing.*;
 
@@ -14,11 +15,15 @@ public class waiting extends CFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
+	private String id = null;
+	private Socket socket = null;
 	
-	public waiting(BufferedWriter bw, BufferedReader br) {
+	public waiting(Socket socket, BufferedWriter bw, BufferedReader br, String id) {
 		// TODO Auto-generated constructor stub
 		super.bw = bw;
 		super.br = br;
+		this.id = id;
+		this.socket = socket;
 	}
 
 	public void setWindow()
@@ -113,7 +118,7 @@ public class waiting extends CFrame{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				createGame creator = new createGame(super.bw, super.br);
+				createGame creator = new createGame(socket, super.bw, super.br, id);
 				
 				creator.setWindow();
 				//mainWindow.dispose();

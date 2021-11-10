@@ -25,16 +25,24 @@ public class gameThreadServer extends Thread{
 	private String userName = "root";
 	private String password = "Destiny3910!";
 	private String address = "jdbc:mysql://localhost:3306/nwproject?useSSL=false";
+	private gameRoom room = null;
 	
-	public gameThreadServer(Socket socket, gameRoom room, String strId)
+	public gameThreadServer(Socket socket, gameRoom room)
 	{
 		this.socket = socket;
-		this.strId = strId;
 		
 		try {
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 		} catch (IOException e) { }
+	}
+	
+	public gameThreadServer(BufferedReader br,BufferedWriter bw , gameRoom room)
+	{
+		this.room = room;
+		
+		this.br = br;
+		this.bw = bw;
 	}
 	
 	@Override
@@ -47,21 +55,20 @@ public class gameThreadServer extends Thread{
 				//String res;
 				
 				req = br.readLine();
-				
+				System.out.println("Msg : " + req);
 				if(req == null)
 				{
 					System.out.println("클라이언트와 연결이 끊겼습니다");
 					break;
 				}
 				
-				String[] tokens = req.split(":");
 				
+				String[] tokens = null;
+				tokens = req.split(":");
 				//턴이 끝났음
 				if("turnOver".equalsIgnoreCase(tokens[0]))
 				{
-					//broadcast("isYourTurn");
-					//상대 클라이언트에게 isYourTurn response
-					
+					room.broadcast("isYourTurn");
 				}
 				//시간초과
 				else if("end".equalsIgnoreCase(tokens[0]))
@@ -76,14 +83,22 @@ public class gameThreadServer extends Thread{
 					prev = tokens[2];
 					ans = tokens[1];
 					
-					if(prev.charAt(prev.length() - 1) == ans.charAt(0))
+					if(tokens.length == 3)
 					{
-						bw.write("correct:" + ans + "\n");
-						bw.flush();
+						if(prev.charAt(prev.length() - 1) == ans.charAt(0))
+						{
+							bw.write("correct:" + ans + "\n");
+							bw.flush();
+						}
+						else
+						{
+							bw.write("wrong\n");
+							bw.flush();
+						}
 					}
 					else
 					{
-						bw.write("wrong\r\n");
+						bw.write("correct:" + ans + "\n");
 						bw.flush();
 					}
 					//1번과 2번 토큰에서 끝말잇기 성공하면 correct response
@@ -129,18 +144,8 @@ public class gameThreadServer extends Thread{
 		synchronized (writerList){
 			writerList.add(writer);
 		}
-	}
-	
-	private void broadcast(String data)
-	{
-		synchronized (writerList) {
-			for(PrintWriter W : writerList)
-			{
-				W.println(data);
-				W.flush();
-			}
-		}
 	}*/
+	
 	
 	private void insertDB(String query)
 	{

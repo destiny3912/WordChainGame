@@ -24,7 +24,6 @@ public class clientMain {
 		// User usr = new User(socket, null);
 		login loginSection = null;
 		
-		
 		try {
 			socket = new Socket(ipNumber, portNumber);
 		} catch (UnknownHostException e) {
@@ -37,7 +36,7 @@ public class clientMain {
 
 		
 		try {
-			loginSection = new login(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),new BufferedReader(new InputStreamReader(socket.getInputStream())));
+			loginSection = new login(socket, new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),new BufferedReader(new InputStreamReader(socket.getInputStream())));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

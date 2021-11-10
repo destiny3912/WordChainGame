@@ -9,18 +9,27 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
+
 import javax.swing.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class game extends CFrame{
 	
+	private Socket socket = null;
+	private String ipNumber = "127.0.0.1";
+	private String chatIpNumber = "127.0.0.1";
+	private int chatPortNumber = 3000;
+	private int portNumber = 3100;
+	BufferedReader br = null;
+	BufferedWriter bw = null;
+	
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
 	private String[] users = {"bundang", "coolj"};
-//	private Socket player;
 	private String playerName;
-	private String prevWord = null;
+	private String prevWord = "가";
 	private int isWin = 1;
 	private int isMyturn = 0;
 	
@@ -38,10 +47,21 @@ public class game extends CFrame{
 	private JLabel resultTitle = new JLabel("");
 	private JLabel resultContent = new JLabel("");
 	
-	public game(BufferedWriter bw, BufferedReader br)
+	public game(String id)
 	{
-		super.bw = bw;
-		super.br = br;
+		this.playerName = id;
+		
+		try {
+			socket = new Socket(ipNumber, portNumber);
+			
+			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			
+		}catch(UnknownHostException e){
+			
+		}catch(IOException e){
+			
+		}
 	}
 
 	public void setWindow()
@@ -132,7 +152,17 @@ public class game extends CFrame{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				waiting waitingSection = new waiting(super.bw, super.br);
+				Socket chatSocket = null;
+				
+				try {
+					chatSocket = new Socket(chatIpNumber, chatPortNumber);
+				}catch(UnknownHostException e1) {
+					
+				}catch(IOException e1) {
+					
+				}
+				
+				waiting waitingSection = new waiting(chatSocket, super.bw, super.br, playerName);
 				
 				waitingSection.setWindow();
 				mainWindow.dispose();
@@ -140,7 +170,6 @@ public class game extends CFrame{
 		});
 		
 		new gameClientReceiveThread(br).start();
-		//turnProgress();
 	}
 	
 	private void sendMsg(String msg, String labelName)
@@ -165,56 +194,76 @@ public class game extends CFrame{
 		public void run() {
 			try {				
 				while(true) {
-					String msg = br.readLine();
 					
-					String[] tokens = msg.split(":");
-					
-					if("end".equalsIgnoreCase(msg)) {
-						btnPanel.add(Return);	// Return button moves to contentResultPanel--btnPanel from headerPanel--returnPanel
-						btnPanel.add(exitBtn);
+						String msg = br.readLine();
+						String[] tokens = null;
 						
-						if(isWin == 1)
+						if(msg != null)
 						{
-							resultTitle.setText("승리");
-							sendMsg("iWin:" + playerName, "iWin");
+							tokens = msg.split(":");
 						}
-						else
-						{
-							resultTitle.setText("패배");
+							
+					if(tokens != null)
+					{
+						if("end".equalsIgnoreCase(msg)) {
+							btnPanel.add(Return);	// Return button moves to contentResultPanel--btnPanel from headerPanel--returnPanel
+							btnPanel.add(exitBtn);
+							
+							if(isWin == 1)
+							{
+								resultTitle.setText("승리");
+								sendMsg("iWin:" + playerName, "iWin");
+							}
+							else
+							{
+								resultTitle.setText("패배");
+							}
+							
+							headerPanel.remove(timer);				
+							mainWindow.remove(contentPanel);
+							mainWindow.remove(footerPanel);
+							mainWindow.add(contentResultPanel, BorderLayout.CENTER);
+							SwingUtilities.updateComponentTreeUI(mainWindow);	// Refresh mainWindow
 						}
-						
-						headerPanel.remove(timer);				
-						mainWindow.remove(contentPanel);
-						mainWindow.remove(footerPanel);
-						mainWindow.add(contentResultPanel, BorderLayout.CENTER);
-						SwingUtilities.updateComponentTreeUI(mainWindow);	// Refresh mainWindow
-					}
-					else if("correct".equalsIgnoreCase(tokens[0]))
-					{
-						prevWord = tokens[1];
-						sendMsg("turnOver:" + playerName, "turnOver");
-					}
-					else if("wrong".equalsIgnoreCase(msg))
-					{
-						sendMsg("iLose:" + playerName, "iLose");
-						isWin = 0;
-					}
-					else if("isYourTurn".equalsIgnoreCase(msg))
-					{
-						if(isMyturn == 0)
+						else if("correct".equalsIgnoreCase(tokens[0]))
 						{
-							isMyturn = 1;
+							prevWord = tokens[1];
+							sendMsg("turnOver", "turnOver");
+						}
+						else if("wrong".equalsIgnoreCase(msg))
+						{
+							sendMsg("iLose:" + playerName, "iLose");
+							isWin = 0;
+						}
+						else if("isYourTurn".equalsIgnoreCase(msg))
+						{
+							if(isMyturn == 0)
+							{
+								isMyturn = 1;
+								turnProgress();
+							}
+							else if(isMyturn == 1)
+							{
+								isMyturn = 0;
+							}
+							
+						}
+						else if("otherCame".equalsIgnoreCase(msg))
+						{
+							turnInitiallize(0);
 							turnProgress();
 						}
-						else if(isMyturn == 1)
+						else if("enteredAndWait".equalsIgnoreCase(msg))
 						{
-							isMyturn = 0;
+							turnInitiallize(1);
 						}
-						
+							
+						msg = null;
 					}
 				}
 			}catch(IOException e)
 			{
+				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -241,14 +290,14 @@ public class game extends CFrame{
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
-						T.cancel();
-						
 						msgForm.setEnabled(false);
-						timer.setText("");
+						timer.setText("상대턴");
 						String answer = msgForm.getText();
 						msgForm.setText("");
 						textForm.append(playerName + " : " + answer + ":" + prevWord + "\n");
-						sendMsg(answer, "answer");
+						sendMsg(answer + ":" + prevWord, "answer");
+						prevWord = answer;
+						T.cancel();
 					}
 				});
 				
@@ -263,6 +312,17 @@ public class game extends CFrame{
 		}, 0, 1000);
 	}
 	
+	public void turnInitiallize(int key)
+	{
+		if(key == 1)
+		{
+			isMyturn = 0;
+		}
+		else if(key == 0)
+		{
+			isMyturn = 1;
+		}
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 

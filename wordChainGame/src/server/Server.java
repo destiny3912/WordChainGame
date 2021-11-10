@@ -1,4 +1,5 @@
 package server;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -11,19 +12,20 @@ public class Server extends Thread {
 	public String strId = "";
 	boolean isLogin;
 	ChatRoom chatRoom;
-	gameRoom gameRoom;
-	ArrayList <gameRoom> roomList = new ArrayList<gameRoom>();
+	gameRoomManager roomList;
 	int numberOfRoom = -1;
-	
-	public Server(Socket tmpSocket, ChatRoom tmpChatRoom) {
+
+	public Server(Socket tmpSocket, ChatRoom tmpChatRoom, gameRoomManager roomList) {
 		socket = tmpSocket;
 		chatRoom = tmpChatRoom;
+		this.roomList = roomList;
 		
 		// 1. 입/출력 Stream 생성
 		try {
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-		} catch (IOException e) { }
+		} catch (IOException e) {
+		}
 	}
 
 	public void run() {
@@ -34,10 +36,14 @@ public class Server extends Thread {
 		try {
 			while (!message.equals("bye")) {
 
-
 				// 4. Client 가 보낸 메시지 받은 후 Server 에서 출력
 				message = br.readLine();
-				String tokens[] = message.split(" ");
+				if(message == null)
+				{
+					message = "cont";
+					continue;
+				}
+					
 				// 받은 메시지출력
 				System.out.println("받은 메시지 ==> " + strId + " : " + message);
 
@@ -45,36 +51,16 @@ public class Server extends Thread {
 				if (message.equals("bye")) {
 					chatRoom.broadCasting("DEU " + strId);
 				}
-				//game room을 만들어주는 요청
-				if(message.equals("createGameRoom"))
-				{
-					gameRoom = new gameRoom();
-					roomList.add(gameRoom);
-					numberOfRoom++;
-					
-					gameThreadServer server = new gameThreadServer(socket,gameRoom, strId);
-					
-					sendMessage("roomNumber " + numberOfRoom);
-					//sendMessage("OWN");
-					server.start();
-					
+				// game room을 만들어주는 요청
+				if (message.equals("createGameRoom")) {
+
+					//sendMessage("roomNumber " + numberOfRoom);
 					chatRoom.exitRoom(this);
-					
-					gameRoom.enterRoom(server);
 					continue;
 				}
-				//만들어져 있는 game room에 들어가는 요청
-				if(tokens[0].equals("enterRoom"))
-				{
-					
-					int roomNumber = Integer.parseInt(tokens[1]);
-					
-					gameThreadServer server = new gameThreadServer(socket, roomList.get(roomNumber), strId);
-					server.start();
-					
+				// 만들어져 있는 game room에 들어가는 요청
+				if (message.equals("enterRoom")) {	
 					chatRoom.exitRoom(this);
-					
-					roomList.get(roomNumber).enterRoom(server);
 					continue;
 				}
 				// 5. 모든 Client 에게 메시지 전송
@@ -91,7 +77,8 @@ public class Server extends Thread {
 				br.close();
 				bw.close();
 				socket.close();
-			} catch (Exception e) { }
+			} catch (Exception e) {
+			}
 			System.out.println("MultiServerThread2 종료");
 		}
 	}
@@ -102,15 +89,16 @@ public class Server extends Thread {
 		try {
 			System.out.println("Client ID 받아오는 중....");
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			
+
 			// Client 가 입력한 ID 받아오기
-			strId = br.readLine(); 
+			strId = br.readLine();
 
 			// 3. 접속자 수 보여주기
 			String userlistStr = chatRoom.display();
 			sendMessage("ok");
 			chatRoom.broadCasting(userlistStr);
-		} catch (IOException e) { }
+		} catch (IOException e) {
+		}
 	}
 
 	// 메세지 전송
@@ -119,6 +107,7 @@ public class Server extends Thread {
 			bw.write(message + "\n");
 			bw.flush();
 
-		} catch (Exception e) { }
+		} catch (Exception e) {
+		}
 	}
 }

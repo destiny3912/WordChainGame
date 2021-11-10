@@ -71,7 +71,6 @@ public class register extends JFrame{
 		NickName.setColumns(12);
 		JButton NickDuplicate = new JButton("Check");
 		
-		
 		IDPane.add(IDText);
 		IDPane.add(ID);
 		IDPane.add(checkDuplicate);
@@ -93,7 +92,7 @@ public class register extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				login loginrSection = new login();
+				login loginSection = new login();
 				
 				loginrSection.setWindow();
 				mainWindow.dispose();

@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.net.Socket;
 
 import javax.swing.*;
 
@@ -13,11 +14,15 @@ public class createGame extends CFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
+	private String id = null;
+	private Socket socket = null;
 	
-	public createGame(BufferedWriter bw, BufferedReader br)
+	public createGame(Socket socket, BufferedWriter bw, BufferedReader br, String id)
 	{
 		super.bw = bw;
 		super.br = br;
+		this.id = id;
+		this.socket = socket;
 	}
 	
 	public void setWindow()
@@ -54,13 +59,19 @@ public class createGame extends CFrame{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				game gameRunner = new game(super.bw, super.br);
+				game gameRunner = new game(id);
 				try {
 					bw.write("createGameRoom" + "\n");
 					bw.flush();
+					bw.close();
+					br.close();
+					socket.close();
+					
 				}catch(Exception e2) { };
 				
 				gameRunner.setWindow();
+				
+				
 				mainWindow.dispose();
 			}
 		});
@@ -70,10 +81,14 @@ public class createGame extends CFrame{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				game gameRunner = new game(super.bw, super.br);
+				game gameRunner = new game(id);
 				try {
-					bw.write("enterRoom " + userName.getText() + "\n");
+					bw.write("enterRoom" + "\n");
 					bw.flush();
+					bw.close();
+					br.close();
+					socket.close();
+					
 				}catch(Exception e2) { };
 				gameRunner.setWindow();
 				mainWindow.dispose();
@@ -84,7 +99,7 @@ public class createGame extends CFrame{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				waiting creator = new waiting(super.bw, super.br);
+				waiting creator = new waiting(socket, super.bw, super.br, id);
 				
 				creator.setWindow();
 				mainWindow.dispose();

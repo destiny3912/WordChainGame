@@ -12,11 +12,21 @@ import java.io.PrintWriter;
 
 public class gameRoom {
 	ArrayList<gameThreadServer> list = new ArrayList<gameThreadServer>();
+	int userNumber = 0;
 	public int roomNumber;
 	
 	public void enterRoom(gameThreadServer server)
 	{
 		list.add(server);
+		userNumber++;
+		
+		if(userNumber == 2)
+		{
+			gameThreadServer tempServer = list.get(0);
+			tempServer.sendMessage("otherCame");
+			tempServer = list.get(1);
+			tempServer.sendMessage("enteredAndWait");
+		}
 	}
 	
 	public void broadcast(String message) {
@@ -36,9 +46,9 @@ public class gameRoom {
 			System.out.println(server.getID() + " Client 제거 실패");
 		}
 	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 	}
-
 }

@@ -4,16 +4,19 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.*;
+import java.net.Socket;
 
 public class login extends CFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
+	private Socket socket = null;
 	
-	public login(BufferedWriter bw, BufferedReader br) {
+	public login(Socket socket, BufferedWriter bw, BufferedReader br) {
 		// TODO Auto-generated constructor stub
 		super.bw = bw;
 		super.br = br;
+		this.socket = socket;
 	}
 
 	public void setWindow()
@@ -117,7 +120,7 @@ public class login extends CFrame{
 					
 				} while (!result.equals("ok"));
 				
-				waiting waitingSection = new waiting(super.bw, super.br);
+				waiting waitingSection = new waiting(socket, super.bw, super.br, id);
 				
 				waitingSection.setWindow();
 				mainWindow.dispose();
