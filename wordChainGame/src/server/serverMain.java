@@ -42,7 +42,6 @@ public class serverMain {
 				// 채팅 객체 생성t
 				server = new Server(socket, room, roomList);
 				// Thread 작동시켜 1)로그인 처리 2)채팅 시작
-
 				server.start();
 				// 채팅 객체를 ArrayList에 저장
 				room.enterRoom(server);
