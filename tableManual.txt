@@ -1,0 +1,10 @@
+ID -> 유저의 ID varchar(21) PK
+PW -> 유저 비밀번호(암호화 필요) varchar(21)
+nickName -> 유저 닉네임 varchar(21)
+win -> 승리횟수 int
+lose -> 패배횟수 int
+name -> 유저 이름 varchar(21)
+Email -> 유저 이메일 varchar(21)
+SNS -> 유저 홈페이지 varchar(21)
+lastTime -> 최근 접속시간 varchar(45)
+accessNum -> 접속 횟수 int
