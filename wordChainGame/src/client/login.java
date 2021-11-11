@@ -10,13 +10,12 @@ public class login extends CFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
-	private Socket socket = null;
 	
 	public login(Socket socket, BufferedWriter bw, BufferedReader br) {
 		// TODO Auto-generated constructor stub
 		super.bw = bw;
 		super.br = br;
-		this.socket = socket;
+		super.socket = socket;
 	}
 	
 	public login()
@@ -92,24 +91,25 @@ public class login extends CFrame{
 		Login.revalidate();
 		Login.repaint();
 		
-		Register.addActionListener(new ActionListener() {
+		Register.addActionListener(new CActionListener(super.socket, super.bw, super.br) {
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				register registerSection = new register();
+				register registerSection = new register(super.socket, super.bw, super.br);
 				
 				registerSection.setWindow();
 				mainWindow.dispose();
 			}
 		});
 
-		Login.addActionListener(new CActionListener(super.bw, super.br) {
+		Login.addActionListener(new CActionListener(super.socket) {
 
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				String result = "";
+				String id = "testInCode";
 				String q;
 				do {
 
@@ -118,14 +118,23 @@ public class login extends CFrame{
 						bw.write(q + "\n");
 						bw.flush();
 						result = br.readLine();
+						if(result.equals("FAL"))	{
+							JOptionPane.showMessageDialog(null, "ID와 비밀번호를 확인 후 다시 시도해 주세요.", "로그인 실패", JOptionPane.ERROR_MESSAGE); 
+						}
+						else {
+							String resultTokens[] = result.split(" ");
+							id = new String(resultTokens[1]);
+						}
 					}
 					catch (Exception ex) {
 						ex.printStackTrace();
 					}
 					
-				} while (!result.equals("ok"));
+
+					
+				} while (!result.substring(0, 3).equals("WEL"));
 				
-				waiting waitingSection = new waiting(socket, super.bw, super.br, id);
+				waiting waitingSection = new waiting(socket, super.bw, super.br, id);	// 여기서 ID는 닉네임?
 				
 				waitingSection.setWindow();
 				mainWindow.dispose();

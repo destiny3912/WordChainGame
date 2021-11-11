@@ -39,8 +39,7 @@ public class ClientCore extends Thread {
 				
 				//	사용자 리스트를 받는 경우
 				else if(protocol.equals("USR"))	{
-					String[] users = msg.substring(4).split(" ");
-					
+					String[] users = msg.substring(4).split(" ");					
 					userList.setText("");
 					for(int i = 0; i < users.length; i++) {
 						userList.append(users[i] + "\n");

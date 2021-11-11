@@ -7,12 +7,25 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.net.Socket;
 
 import javax.swing.*;
 
 public class register extends CFrame{
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
+	
+	public register(Socket socket, BufferedWriter bw, BufferedReader br) {
+		// TODO Auto-generated constructor stub
+		super.bw = bw;
+		super.br = br;
+		super.socket = socket;
+	}
+	
+	public register()
+	{
+	}
+		
 	
 	public void setWindow()
 	{
@@ -131,11 +144,11 @@ public class register extends CFrame{
 				/* ID, PW, NickName, Name, EMail, SNS 순입니다 */
 				String result = "";
 				String q = "REG " +
-							ID.getText().replaceAll(" ", "") + 
-							PW.getText().replaceAll(" ", "") + 
-							NickName.getText().replaceAll(" ", "") + 
-							Name.getText().replaceAll(" ", "") + 
-							EMail.getText().replaceAll(" ", "") + 
+							ID.getText().replaceAll(" ", "") + " " +
+							PW.getText().replaceAll(" ", "") + " " +
+							NickName.getText().replaceAll(" ", "") + " " +
+							Name.getText().replaceAll(" ", "") + " " +
+							EMail.getText().replaceAll(" ", "") + " " +
 							SNS.getText().replaceAll(" ", "");
 							
 				try {
@@ -147,11 +160,15 @@ public class register extends CFrame{
 					ex.printStackTrace();
 				}
 				
-				login loginSection = new login();
-				
-				loginSection.setWindow();
-				mainWindow.dispose();
-				
+				String tokens[] = result.split(" ");
+				if(tokens[0].equals("REG"))	{
+					JOptionPane.showMessageDialog(null, tokens[1] + "님 회원가입에 성공했습니다.", "회원가입 성공", JOptionPane.ERROR_MESSAGE);
+					login loginSection = new login(super.socket, super.bw, super.br);
+					loginSection.setWindow();
+					mainWindow.dispose();
+				} else {
+					JOptionPane.showMessageDialog(null, "회원가입에 실패했습니다. 다시 시도해 주세요.", "회원가입 실패", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		

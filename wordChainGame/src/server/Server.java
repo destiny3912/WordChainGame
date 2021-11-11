@@ -62,7 +62,7 @@ public class Server extends Thread {
 				}
 					
 				// 받은 메시지출력
-				System.out.println("받은 메시지 ==> " + strId + " : " + message);
+				System.out.println("[받은 메시지] " + strId + " : " + message);
 
 				// bye 입력 시 서버 나감
 				if (message.equals("bye")) {
@@ -87,16 +87,17 @@ public class Server extends Thread {
 
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
-			System.out.println("메세지를 수신하여 송신중 예외 발생....");
+			System.out.println("예외발생");
 		} finally {
 			chatRoom.exitRoom(this);
 			try {
 				br.close();
 				bw.close();
 				socket.close();
+				// DEU 필요함
 			} catch (Exception e) {
 			}
-			System.out.println("MultiServerThread2 종료");
+			System.out.println("Server.java 종료 (Client가 연결을 종료했습니다)");
 		}
 	}
 
@@ -104,28 +105,31 @@ public class Server extends Thread {
 	public boolean login() {
 
 		try {
-			System.out.println("Client ID 받아오는 중....");
+			System.out.println("[Get Client ID...]");
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 			// Client 가 입력한 ID 받아오기
 			String message = br.readLine(); 
 			String tokens[] = message.split(" ");
+			String result = null;
 			if (tokens[0].equals("LOG"))	{
-				if(auth(tokens))	{
-					sendMessage("WEL");
-				} else {
+				result = auth(tokens);
+				if(result.equals("FAL"))	{
 					sendMessage("FAL");
 					return false;
 				}
 			}
 			else if (tokens[0].equals("REG")) {
-				register(tokens);
-				
+				String id = register(tokens);
+				sendMessage("REG " + id);
+				return false;	// 회원가입 후 다시 로그인으로 돌아감
 			}
-
+			
+			String resultTokens[] = result.split(" ");
 			// 3. 접속자 수 보여주기
+			this.strId = resultTokens[1];
 			String userlistStr = chatRoom.display();
-			sendMessage("ok");
+			sendMessage("WEL " + resultTokens[1]);
 			chatRoom.broadCasting(userlistStr);
 		} catch (IOException e) { }
 		return true;
@@ -133,8 +137,10 @@ public class Server extends Thread {
 	
 	
 	// Auth : Auth User
-	public boolean auth(String[] tokens) {
-		Boolean result = false;
+	// 로그인 성공시 WEL nickName 반환
+	// 실패시 FAL 반환
+	public String auth(String[] tokens) {
+		String result = "FAL";
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -152,17 +158,30 @@ public class Server extends Thread {
 
 		try {
 			stmt = con.createStatement();
-			String sql = "select ID, course_id from userinfo where ID=" + tokens[1] +"and PW=" + tokens[2];
+			String sql = "select nickName from userinfo where ID='" + tokens[1] + "' and PW='" + tokens[2]+"'";
 			rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
-				String name = rs.getString(1);
+				String nickName = rs.getString(1);
 				if (rs.wasNull()) {
-					name = "null";
-					result = false;
+					nickName = "null";
+					result = "FAL";
 				}
 				else {
-					result = tokens[1].equals(name);
+					result = "WEL " + nickName;
+					PreparedStatement pstmt = null;
+					String[] sets = {"lastTime=now()", "accessNum=accessNum+1"};
+					int count = 0;
+					for(int i = 0; i < sets.length; i++) {
+						String psql = "update userinfo set " + sets[i] + " where id=?";
+						pstmt = con.prepareStatement(psql);
+						pstmt.setString(1, tokens[1]);
+						count += pstmt.executeUpdate();
+					}
+					if(count != sets.length) {
+						System.out.println("ERROR : Error occurs during update lastTime, accessNum.");
+					}
+
 				}
 			}
 		} catch (SQLException e1) {
@@ -184,7 +203,10 @@ public class Server extends Thread {
 	
 	// register : Insert New User to DB
 	/* ID, PW, NickName, Name, EMail, SNS 순입니다 */
-	public void register(String[] tokens) {
+	// 회원가입 성공시 ID를 반환
+	// 그 외 null을 반환
+	public String register(String[] tokens) {
+		String name = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
@@ -198,13 +220,15 @@ public class Server extends Thread {
 		}
 		
 		try {
-			String psql = "insert into userinfo(ID, PW, nickName, name, Email, SNS) values ('?', '?', '?', '?', '?', '?');";
+			String psql = "insert into userinfo(ID, PW, nickName, name, Email, SNS) values (?, ?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(psql);
 			for(int i = 1; i <= 6; i++)	{
 				pstmt.setString(i, tokens[i]);
 			}
 			int count = pstmt.executeUpdate();
-			System.out.println(count);
+			if (count == 1)	{
+				name = tokens[1];	// 회원가입 성공시 가입 ID를 리턴해주기 위해서
+			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -215,9 +239,9 @@ public class Server extends Thread {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		return name;
 	}
 	
-
 	// 메세지 전송
 	public void sendMessage(String message) {
 		try {
