@@ -136,12 +136,16 @@ public class register extends CFrame{
 		JButton Enter = new JButton("Submit");
 		buttonPane.add(Enter);
 		
-		Enter.addActionListener(new CActionListener(super.bw, super.br) {
+		Enter.addActionListener(new CActionListener(super.socket, super.bw, super.br) {
 
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				/* ID, PW, NickName, Name, EMail, SNS 순입니다 */
+				if (!(PW.getText().replaceAll(" ", "").equals(PWCheck.getText().replaceAll(" ", "")))) {
+					JOptionPane.showMessageDialog(null, "비밀번호란과 비밀번호 확인란의 내용이 서로 다릅니다.", "회원가입 실패", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				String result = "";
 				String q = "REG " +
 							ID.getText().replaceAll(" ", "") + " " +
@@ -162,7 +166,8 @@ public class register extends CFrame{
 				
 				String tokens[] = result.split(" ");
 				if(tokens[0].equals("REG"))	{
-					JOptionPane.showMessageDialog(null, tokens[1] + "님 회원가입에 성공했습니다.", "회원가입 성공", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, tokens[1] + "님 회원가입에 성공했습니다.", "회원가입 성공", JOptionPane.INFORMATION_MESSAGE);
+					System.out.println(super.socket.getInetAddress());
 					login loginSection = new login(super.socket, super.bw, super.br);
 					loginSection.setWindow();
 					mainWindow.dispose();
