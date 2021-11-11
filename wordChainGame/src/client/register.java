@@ -5,9 +5,12 @@ package client;
  * */
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+
 import javax.swing.*;
 
-public class register extends JFrame{
+public class register extends CFrame{
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
 	
@@ -51,7 +54,7 @@ public class register extends JFrame{
 		JPanel PWPane = new JPanel();
 		PWPane.setLayout(fl);
 		infomationPane.add(PWPane);
-		JLabel PWText = new JLabel("PW");
+		JLabel PWText = new JLabel("Password");
 		PWText.setHorizontalAlignment(JLabel.LEFT);
 		JTextField PW = new JTextField();
 		PW.setColumns(12);
@@ -59,17 +62,42 @@ public class register extends JFrame{
 		JPanel RePane = new JPanel();
 		RePane.setLayout(fl);
 		infomationPane.add(RePane);
-		JLabel ReText = new JLabel("Repeat");
+		JLabel ReText = new JLabel("Confirm Password");
 		JTextField PWCheck = new JTextField();
 		PWCheck.setColumns(12);
 		
 		JPanel NickNamePane = new JPanel();
 		NickNamePane.setLayout(fl);
 		infomationPane.add(NickNamePane);
-		JLabel NameText = new JLabel("Nick Name");
+		JLabel NickNameText = new JLabel("Nickname");
 		JTextField NickName = new JTextField();
 		NickName.setColumns(12);
 		JButton NickDuplicate = new JButton("Check");
+		
+		JPanel NamePane = new JPanel();
+		NamePane.setLayout(fl);
+		infomationPane.add(NamePane);
+		JLabel NameText = new JLabel("Name");
+		NameText.setHorizontalAlignment(JLabel.LEFT);
+		JTextField Name = new JTextField();
+		Name.setColumns(12);
+		
+		JPanel EMailPane = new JPanel();
+		EMailPane.setLayout(fl);
+		infomationPane.add(EMailPane);
+		JLabel EMailText = new JLabel("E-Mail");
+		EMailText.setHorizontalAlignment(JLabel.LEFT);
+		JTextField EMail = new JTextField();
+		EMail.setColumns(12);
+		
+		JPanel SNSPane = new JPanel();
+		SNSPane.setLayout(fl);
+		infomationPane.add(SNSPane);
+		JLabel SNSText = new JLabel("SNS");
+		SNSText.setHorizontalAlignment(JLabel.LEFT);
+		JTextField SNS = new JTextField();
+		SNS.setColumns(12);
+		
 		
 		IDPane.add(IDText);
 		IDPane.add(ID);
@@ -78,26 +106,69 @@ public class register extends JFrame{
 		PWPane.add(PW, BorderLayout.WEST);
 		RePane.add(ReText, BorderLayout.WEST);
 		RePane.add(PWCheck, BorderLayout.WEST);
-		NickNamePane.add(NameText, BorderLayout.WEST);
+		NickNamePane.add(NickNameText, BorderLayout.WEST);
 		NickNamePane.add(NickName, BorderLayout.WEST);
 		NickNamePane.add(NickDuplicate, BorderLayout.WEST);
+		NamePane.add(NameText, BorderLayout.WEST);
+		NamePane.add(Name, BorderLayout.WEST);
+		NamePane.add(Name, BorderLayout.WEST);
+		EMailPane.add(EMailText, BorderLayout.WEST);
+		EMailPane.add(EMail, BorderLayout.WEST);
+		SNSPane.add(SNSText, BorderLayout.WEST);
+		SNSPane.add(SNS, BorderLayout.WEST);
+
 		
 		//Footer
 		buttonPane.setLayout(new FlowLayout());
-		JButton Enter = new JButton("Subimt");
+		JButton Enter = new JButton("Submit");
 		buttonPane.add(Enter);
 		
-		Enter.addActionListener(new ActionListener() {
+		Enter.addActionListener(new CActionListener(super.bw, super.br) {
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				/* ID, PW, NickName, Name, EMail, SNS 순입니다 */
+				String result = "";
+				String q = "REG " +
+							ID.getText().replaceAll(" ", "") + 
+							PW.getText().replaceAll(" ", "") + 
+							NickName.getText().replaceAll(" ", "") + 
+							Name.getText().replaceAll(" ", "") + 
+							EMail.getText().replaceAll(" ", "") + 
+							SNS.getText().replaceAll(" ", "");
+							
+				try {
+					bw.write(q + "\n");
+					bw.flush();
+					result = br.readLine();
+				}
+				catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				
+				login loginSection = new login();
+				
+				loginSection.setWindow();
+				mainWindow.dispose();
+				
+			}
+		});
+		
+		
+		/*
+		new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				login loginSection = new login();
 				
-				loginrSection.setWindow();
+				loginSection.setWindow();
 				mainWindow.dispose();
 			}
 		});
+		*/
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

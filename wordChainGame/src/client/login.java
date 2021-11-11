@@ -18,6 +18,11 @@ public class login extends CFrame{
 		super.br = br;
 		this.socket = socket;
 	}
+	
+	public login()
+	{
+		
+	}
 
 	public void setWindow()
 	{
@@ -105,12 +110,12 @@ public class login extends CFrame{
 			public void actionPerformed(ActionEvent e)
 			{
 				String result = "";
-				String id;
+				String q;
 				do {
 
-					id = ID.getText();					
+					q = "LOG " + ID.getText().replaceAll(" ", "") + " " + PW.getText().replaceAll(" ", "");					
 					try {
-						bw.write(id + "\n");
+						bw.write(q + "\n");
 						bw.flush();
 						result = br.readLine();
 					}

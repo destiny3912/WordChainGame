@@ -3,6 +3,12 @@ package server;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class Server extends Thread {
 	private Socket socket;
@@ -15,7 +21,14 @@ public class Server extends Thread {
 	gameRoomManager roomList;
 	int numberOfRoom = -1;
 
+	/* About DB */
+	private String userName = "root";
+	private String password = "Destiny3910!";
+	private String address = "jdbc:mysql://localhost:3306/nwproject?useSSL=false";
+	/**/
+
 	public Server(Socket tmpSocket, ChatRoom tmpChatRoom, gameRoomManager roomList) {
+	
 		socket = tmpSocket;
 		chatRoom = tmpChatRoom;
 		this.roomList = roomList;
@@ -30,9 +43,13 @@ public class Server extends Thread {
 
 	public void run() {
 		String message = "";
+		Boolean isLogin = false;
 
 		// 1. 로그인 처리(Client 아이디 받아오기)
-		login();
+		do {
+			isLogin = login();
+		} while (!isLogin);
+		
 		try {
 			while (!message.equals("bye")) {
 
@@ -84,22 +101,122 @@ public class Server extends Thread {
 	}
 
 	// 로그인 (Client 에서 Server 로 ID 전송해서 받음)
-	public void login() {
+	public boolean login() {
 
 		try {
 			System.out.println("Client ID 받아오는 중....");
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 			// Client 가 입력한 ID 받아오기
-			strId = br.readLine();
+			String message = br.readLine(); 
+			String tokens[] = message.split(" ");
+			if (tokens[0].equals("LOG"))	{
+				if(auth(tokens))	{
+					sendMessage("WEL");
+				} else {
+					sendMessage("FAL");
+					return false;
+				}
+			}
+			else if (tokens[0].equals("REG")) {
+				register(tokens);
+				
+			}
 
 			// 3. 접속자 수 보여주기
 			String userlistStr = chatRoom.display();
 			sendMessage("ok");
 			chatRoom.broadCasting(userlistStr);
-		} catch (IOException e) {
+		} catch (IOException e) { }
+		return true;
+	}
+	
+	
+	// Auth : Auth User
+	public boolean auth(String[] tokens) {
+		Boolean result = false;
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		/**/
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection(address, userName, password);
+			System.out.println(con);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			stmt = con.createStatement();
+			String sql = "select ID, course_id from userinfo where ID=" + tokens[1] +"and PW=" + tokens[2];
+			rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				String name = rs.getString(1);
+				if (rs.wasNull()) {
+					name = "null";
+					result = false;
+				}
+				else {
+					result = tokens[1].equals(name);
+				}
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			if (stmt != null && !stmt.isClosed()) {
+				stmt.close();
+			}
+			if (rs != null && !rs.isClosed()) {
+				rs.close();
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		return result;
+	}
+	
+	// register : Insert New User to DB
+	/* ID, PW, NickName, Name, EMail, SNS 순입니다 */
+	public void register(String[] tokens) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection(address, userName, password);
+			System.out.println(con);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			String psql = "insert into userinfo(ID, PW, nickName, name, Email, SNS) values ('?', '?', '?', '?', '?', '?');";
+			pstmt = con.prepareStatement(psql);
+			for(int i = 1; i <= 6; i++)	{
+				pstmt.setString(i, tokens[i]);
+			}
+			int count = pstmt.executeUpdate();
+			System.out.println(count);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			if (pstmt != null && !pstmt.isClosed()) {
+				pstmt.close();
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
 	}
+	
 
 	// 메세지 전송
 	public void sendMessage(String message) {
@@ -110,4 +227,5 @@ public class Server extends Thread {
 		} catch (Exception e) {
 		}
 	}
+
 }
