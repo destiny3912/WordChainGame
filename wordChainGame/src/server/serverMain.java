@@ -45,8 +45,6 @@ public class serverMain {
 				server.start();
 				// 채팅 객체를 ArrayList에 저장
 				room.enterRoom(server);
-				
-				
 			}
 
 		} catch (IOException e) {

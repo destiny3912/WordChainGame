@@ -35,10 +35,16 @@ public class gameRoom {
 	
 	public void broadcast(String message) {
 		gameThreadServer server = null;
-
-		for (int i = 0; i < list.size(); i++) {
+		
+		if(list.size() != 2)
+			return;
+		
+		System.out.println("Broadcast : " + message);
+		
+		for (int i = 0; i < 2; i++) {
 			server = list.get(i);
 			server.sendMessage(message);
+			
 		}
 	}
 	

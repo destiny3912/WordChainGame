@@ -36,6 +36,7 @@ public class game extends CFrame{
 	private JLabel timer = new JLabel("10초 남음");
 	private JTextArea textForm = new JTextArea(50, 100);
 	private JTextArea msgForm = new JTextArea(1, 40);//입력창
+	JLabel title = new JLabel("상대방 대기중");
 	private JPanel headerPanel = new JPanel();
 	private JPanel contentPanel = new JPanel();
 	private JPanel contentResultPanel = new JPanel();
@@ -83,7 +84,6 @@ public class game extends CFrame{
 		returnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
 		// USER ID
-		JLabel title = new JLabel("상대방 대기중");
 		title.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		titlePanel.add(title);
@@ -171,7 +171,6 @@ public class game extends CFrame{
 		
 		new gameClientReceiveThread(br).start();
 		sendMsg(playerName, "myName");
-		title.setText(playerName + " vs. " + otherPlayer);
 	}
 	
 	private void sendMsg(String msg, String labelName)
@@ -230,14 +229,30 @@ public class game extends CFrame{
 						}
 						else if("correct".equalsIgnoreCase(tokens[0]))
 						{
-							textForm.append("정답입니다\n");
-							textForm.append("턴 종료");
+							textForm.append(" 정답입니다\n");
+							textForm.append("턴 종료\n");
 							sendMsg("turnOver", "turnOver");
 						}
 						else if("wrong".equalsIgnoreCase(msg))
 						{
-							sendMsg("iLose:" + playerName, "iLose");
-							isWin = 0;
+							if(isMyturn == 1)
+							{
+								isWin = 0;
+								sendMsg("iLose:" + playerName, "iLose");
+							}
+							else
+							{
+								isWin = 1;
+							}
+							
+						}
+						else if("timeOver".equalsIgnoreCase(tokens[0]))
+						{
+							if(playerName.equalsIgnoreCase(tokens[1]))
+							{
+								isWin = 0;
+								sendMsg("iLose:" + playerName, "iLose");
+							}
 						}
 						else if("isYourTurn".equalsIgnoreCase(msg))
 						{
@@ -269,7 +284,7 @@ public class game extends CFrame{
 							prevWord = tokens[2];
 							if(isMyturn == 0)
 							{
-								textForm.append(tokens[1] + " : " + tokens[2]);
+								textForm.append(tokens[1] + " : " + tokens[2] + "\n");
 							}
 						}
 						else if("otherID".equalsIgnoreCase(tokens[0]))
@@ -277,6 +292,8 @@ public class game extends CFrame{
 							if(!playerName.equalsIgnoreCase(tokens[1]))
 							{
 								otherPlayer = tokens[1];
+								textForm.append(otherPlayer + "님이 게임에 참가하였습니다.\n");
+								title.setText(playerName + " vs. " + otherPlayer);
 							}
 						}
 							
@@ -333,7 +350,7 @@ public class game extends CFrame{
 				if(i < 0)
 				{
 					timer.setText("시간초과");
-					sendMsg("end", "end");
+					sendMsg("timeOver:" + playerName, "timeOver");
 					msgForm.setEnabled(false);
 					T.cancel();
 				}

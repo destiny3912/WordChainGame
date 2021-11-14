@@ -55,7 +55,7 @@ public class gameThreadServer extends Thread{
 				String req;
 				
 				req = br.readLine();
-				System.out.println("Msg : " + req);
+				System.out.println("Received : " + req);
 				if(req == null)
 				{
 					System.out.println("클라이언트와 연결이 끊겼습니다");
@@ -67,12 +67,14 @@ public class gameThreadServer extends Thread{
 				//턴이 끝났음
 				if("turnOver".equalsIgnoreCase(tokens[0]))
 				{
-					room.broadcast("isYourTurn");
+					sendMessage("isYourTurn");
+					tokens = null;
 				}
 				//시간초과
 				else if("end".equalsIgnoreCase(tokens[0]))
 				{
 					room.broadcast("end");
+					tokens = null;
 					//모든 클라이언트에게 게임 종료 end response
 				}
 				else if("answer".equalsIgnoreCase(tokens[0]))
@@ -91,31 +93,40 @@ public class gameThreadServer extends Thread{
 						//오답인경우
 						else
 						{
-							sendMessage("wrong");
+							room.broadcast("wrong");
 						}
+						tokens = null;
 					//1번과 2번 토큰에서 끝말잇기 성공하면 correct response
 					//틀렸다면 end response
 				}
 				else if("iWin".equalsIgnoreCase(tokens[0]))
 				{
 					String query;
-					query = "UPDATE userinfo SET win = win + 1 WHERE ID = tokens[1] ";
+					query = "UPDATE userinfo SET win = win + 1 WHERE ID = tokens[1]";
 					insertDB(query);
+					tokens = null;
 					//DB에 tokens[1]을 이름으로하는 플레이어의 승리 카운트 + 1
 				}
 				else if("iLose".equalsIgnoreCase(tokens[0]))
 				{
 					room.broadcast("end");
 					String query;
-					query = "UPDATE userinfo SET lose = lose + 1 WHERE ID = tokens[1] ";
+					query = "UPDATE userinfo SET lose = lose + 1 WHERE ID = tokens[1]";
 					insertDB(query);
+					tokens = null;
 					//DB에 tokens[1]을 이름으로하는 플레이어의 패배 카운트 + 1
 				}
 				else if("myName".equalsIgnoreCase(tokens[0]))
 				{
 					strId = tokens[1];
 					room.broadcast("otherID:" + strId);
+					tokens = null;
 				}
+				else if("timeOver".equalsIgnoreCase(tokens[0]))
+				{
+					room.broadcast("timeOver:" + tokens[2]);
+				}
+				req = "";
 			}
 		}catch(IOException e) {
 			System.out.println(this.strId + "님이 게임에서 나갔습니다.");
@@ -127,11 +138,11 @@ public class gameThreadServer extends Thread{
 		Statement state = null;
 		
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection(address, userName, password);
 			
 			state = con.createStatement();
-			state.execute(query);
+			state.executeUpdate(query);
 		}catch(ClassNotFoundException e) {
 			
 		}catch(SQLException e) {
@@ -140,7 +151,11 @@ public class gameThreadServer extends Thread{
 			
 			try {
 				if(state != null)
+				{
 					state.close();
+					con.close();
+				}
+					
 			}catch(SQLException e1) {
 				
 			}
@@ -156,6 +171,7 @@ public class gameThreadServer extends Thread{
 	
 	public void sendMessage(String message) {
 		try {
+			System.out.println("Send to " + strId + " : " + message);
 			bw.write(message + "\n");
 			bw.flush();
 
