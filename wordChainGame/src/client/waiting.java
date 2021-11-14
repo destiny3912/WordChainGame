@@ -121,7 +121,7 @@ public class waiting extends CFrame{
 				createGame creator = new createGame(socket, super.bw, super.br, id);
 				
 				creator.setWindow();
-				//mainWindow.dispose();
+				mainWindow.dispose();
 			}
 			
 		});

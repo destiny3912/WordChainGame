@@ -44,7 +44,6 @@ public class clientMain {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		loginSection.setWindow();
 	}
 }

@@ -27,8 +27,8 @@ public class game extends CFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
-	private String[] users = {"bundang", "coolj"};
 	private String playerName;
+	private String otherPlayer;
 	private String prevWord = "가";
 	private int isWin = 1;
 	private int isMyturn = 0;
@@ -83,13 +83,13 @@ public class game extends CFrame{
 		returnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
 		// USER ID
-		JLabel title = new JLabel(users[0] + " vs. " + users[1]);
+		JLabel title = new JLabel("상대방 대기중");
 		title.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		titlePanel.add(title);
 		
 		// 전적
-		JLabel record = new JLabel("전적 : ");
+		JLabel record = new JLabel("전적 : N/A");
 		record.setFont(new Font("맑은 고딕", Font.BOLD, 12));
 		record.setHorizontalAlignment(SwingConstants.CENTER);
 		titlePanel.add(record);
@@ -170,6 +170,8 @@ public class game extends CFrame{
 		});
 		
 		new gameClientReceiveThread(br).start();
+		sendMsg(playerName, "myName");
+		title.setText(playerName + " vs. " + otherPlayer);
 	}
 	
 	private void sendMsg(String msg, String labelName)
@@ -228,7 +230,8 @@ public class game extends CFrame{
 						}
 						else if("correct".equalsIgnoreCase(tokens[0]))
 						{
-							prevWord = tokens[1];
+							textForm.append("정답입니다\n");
+							textForm.append("턴 종료");
 							sendMsg("turnOver", "turnOver");
 						}
 						else if("wrong".equalsIgnoreCase(msg))
@@ -249,14 +252,32 @@ public class game extends CFrame{
 							}
 							
 						}
+						//방 만들고 상대방이 들어온 경우
 						else if("otherCame".equalsIgnoreCase(msg))
 						{
 							turnInitiallize(0);
 							turnProgress();
 						}
+						//만들어진 방에 참여한 경우
 						else if("enteredAndWait".equalsIgnoreCase(msg))
 						{
 							turnInitiallize(1);
+						}
+						//상대방이 입력한 답안을 받는경우
+						else if("src".equalsIgnoreCase(tokens[0]))
+						{
+							prevWord = tokens[2];
+							if(isMyturn == 0)
+							{
+								textForm.append(tokens[1] + " : " + tokens[2]);
+							}
+						}
+						else if("otherID".equalsIgnoreCase(tokens[0]))
+						{
+							if(!playerName.equalsIgnoreCase(tokens[1]))
+							{
+								otherPlayer = tokens[1];
+							}
 						}
 							
 						msg = null;
@@ -300,7 +321,7 @@ public class game extends CFrame{
 							msgForm.setText("");
 							textForm.append(playerName + " : " + answer + ":" + prevWord + "\n");
 							System.out.println(answer);
-							sendMsg(answer + ":" + prevWord, "answer");
+							sendMsg(answer + ":" + prevWord + ":" + playerName, "answer");
 							prevWord = answer;
 							T.cancel();
 							flag = 1;

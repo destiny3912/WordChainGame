@@ -128,13 +128,10 @@ public class login extends CFrame{
 					}
 					catch (Exception ex) {
 						ex.printStackTrace();
-					}
-					
-
-					
+					}					
 				} while (!result.substring(0, 3).equals("WEL"));
 				
-				waiting waitingSection = new waiting(socket, super.bw, super.br, id);	// 여기서 ID는 닉네임?
+				waiting waitingSection = new waiting(socket, super.bw, super.br, id);	// 여기서 ID는 닉네임입니다.
 				
 				waitingSection.setWindow();
 				mainWindow.dispose();

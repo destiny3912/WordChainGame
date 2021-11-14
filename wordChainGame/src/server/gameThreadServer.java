@@ -24,9 +24,10 @@ public class gameThreadServer extends Thread{
 	private Connection con = null;
 	private String userName = "root";
 	private String password = "Destiny3910!";
-	private String address = "jdbc:mysql://localhost:3306/nwproject?useSSL=false";
+	private String address = "jdbc:mysql://localhost:3306/nwproject?useUnicode=true&characterEncoding=utf8";
 	private gameRoom room = null;
 	
+	//서버를 생성할때 socket을 받아 stream을 establish합니다.
 	public gameThreadServer(Socket socket, gameRoom room)
 	{
 		this.socket = socket;
@@ -41,7 +42,6 @@ public class gameThreadServer extends Thread{
 	public gameThreadServer(BufferedReader br,BufferedWriter bw , gameRoom room)
 	{
 		this.room = room;
-		
 		this.br = br;
 		this.bw = bw;
 	}
@@ -62,7 +62,6 @@ public class gameThreadServer extends Thread{
 					break;
 				}
 				
-				
 				String[] tokens = null;
 				tokens = req.split(":");
 				//턴이 끝났음
@@ -73,34 +72,27 @@ public class gameThreadServer extends Thread{
 				//시간초과
 				else if("end".equalsIgnoreCase(tokens[0]))
 				{
-					//broadcast("end");
-					//quitGame(out);
+					room.broadcast("end");
 					//모든 클라이언트에게 게임 종료 end response
 				}
 				else if("answer".equalsIgnoreCase(tokens[0]))
 				{
-					String prev, ans;
+					String prev, ans, srcPlayer;
 					prev = tokens[2];
 					ans = tokens[1];
+					srcPlayer = tokens[3];
 					
-					if(tokens.length == 3)
-					{
+					room.broadcast("src:" + srcPlayer + ":" + ans);
+						//정답인경우
 						if(prev.charAt(prev.length() - 1) == ans.charAt(0))
 						{
-							bw.write("correct:" + ans + "\n");
-							bw.flush();
+							room.broadcast("correct:" + ans);
 						}
+						//오답인경우
 						else
 						{
-							bw.write("wrong\n");
-							bw.flush();
+							sendMessage("wrong");
 						}
-					}
-					else
-					{
-						bw.write("correct:" + ans + "\n");
-						bw.flush();
-					}
 					//1번과 2번 토큰에서 끝말잇기 성공하면 correct response
 					//틀렸다면 end response
 				}
@@ -113,11 +105,16 @@ public class gameThreadServer extends Thread{
 				}
 				else if("iLose".equalsIgnoreCase(tokens[0]))
 				{
-					//broadcast("end");
+					room.broadcast("end");
 					String query;
 					query = "UPDATE userinfo SET lose = lose + 1 WHERE ID = tokens[1] ";
 					insertDB(query);
 					//DB에 tokens[1]을 이름으로하는 플레이어의 패배 카운트 + 1
+				}
+				else if("myName".equalsIgnoreCase(tokens[0]))
+				{
+					strId = tokens[1];
+					room.broadcast("otherID:" + strId);
 				}
 			}
 		}catch(IOException e) {
@@ -138,7 +135,7 @@ public class gameThreadServer extends Thread{
 		}catch(ClassNotFoundException e) {
 			
 		}catch(SQLException e) {
-			
+			System.out.println("DB계정ERROR in gameThreadServer");
 		}finally {
 			
 			try {

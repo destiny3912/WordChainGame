@@ -24,7 +24,7 @@ public class Server extends Thread {
 	/* About DB */
 	private String userName = "root";
 	private String password = "Destiny3910!";
-	private String address = "jdbc:mysql://localhost:3306/nwproject?useSSL=false";
+	private String address = "jdbc:mysql://localhost:3306/nwproject?useUnicode=true&characterEncoding=utf8";
 	/**/
 
 	public Server(Socket tmpSocket, ChatRoom tmpChatRoom, gameRoomManager roomList) {
@@ -147,7 +147,7 @@ public class Server extends Thread {
 
 		/**/
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection(address, userName, password);
 			System.out.println(con);
 		} catch (ClassNotFoundException e) {
@@ -181,7 +181,6 @@ public class Server extends Thread {
 					if(count != sets.length) {
 						System.out.println("ERROR : Error occurs during update lastTime, accessNum.");
 					}
-
 				}
 			}
 		} catch (SQLException e1) {
@@ -210,12 +209,13 @@ public class Server extends Thread {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection(address, userName, password);
 			System.out.println(con);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
+			System.out.println("DB계정오류");
 			e.printStackTrace();
 		}
 		
