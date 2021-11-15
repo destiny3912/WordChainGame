@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 
 public class login extends CFrame{
 	
@@ -109,11 +110,20 @@ public class login extends CFrame{
 			public void actionPerformed(ActionEvent e)
 			{
 				String result = "";
-				String id = "testInCode";
+				String id = "";
 				String q;
 				do {
+					
+					q = "LOG " + ID.getText().replaceAll(" ", "") + " ";	
+					
+			        SHA256 sha256 = new SHA256();
+					try {
+						q += sha256.encrypt(PW.getText().replaceAll(" ", ""));
+					} catch (NoSuchAlgorithmException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
-					q = "LOG " + ID.getText().replaceAll(" ", "") + " " + PW.getText().replaceAll(" ", "");					
 					try {
 						bw.write(q + "\n");
 						bw.flush();

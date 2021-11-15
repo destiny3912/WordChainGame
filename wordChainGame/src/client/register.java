@@ -8,6 +8,7 @@ import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 
 import javax.swing.*;
 
@@ -148,12 +149,19 @@ public class register extends CFrame{
 				}
 				String result = "";
 				String q = "REG " +
-							ID.getText().replaceAll(" ", "") + " " +
-							PW.getText().replaceAll(" ", "") + " " +
-							NickName.getText().replaceAll(" ", "") + " " +
-							Name.getText().replaceAll(" ", "") + " " +
-							EMail.getText().replaceAll(" ", "") + " " +
-							SNS.getText().replaceAll(" ", "");
+							ID.getText().replaceAll(" ", "") + " ";
+				
+		        SHA256 sha256 = new SHA256();
+				try {
+					q += sha256.encrypt(PW.getText().replaceAll(" ", ""));
+				} catch (NoSuchAlgorithmException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				q += NickName.getText().replaceAll(" ", "") + " " +
+					Name.getText().replaceAll(" ", "") + " " +
+					EMail.getText().replaceAll(" ", "") + " " +
+					SNS.getText().replaceAll(" ", "");
 							
 				try {
 					bw.write(q + "\n");
