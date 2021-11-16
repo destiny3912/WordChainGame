@@ -3,9 +3,11 @@ package server;
 import java.util.ArrayList;
 /*
  * game room들을 관리하는 관리 class입니다.
+ * 
+ * game room은 0번부터 시작하며 
  * */
 public class gameRoomManager {
-	private ArrayList<gameRoom> roomList = new ArrayList<gameRoom>();
+	private ArrayList<gameRoom> roomList = new ArrayList<gameRoom>();//game room list
 	private int roomNumber = 0;
 	
 	//room 추가
@@ -13,6 +15,12 @@ public class gameRoomManager {
 	{
 		roomList.add(room);
 		roomNumber++;
+	}
+	
+	public void purgeRoom(gameRoom room)
+	{
+		//roomList.remove(room);
+		roomNumber--;
 	}
 	
 	public gameRoom getRoom(int index)
@@ -25,8 +33,8 @@ public class gameRoomManager {
 		return roomList;
 	}
 	
-	public int getRoomNumber()
+	public int getRoomNumber(gameRoom room)
 	{
-		return roomNumber;
+		return roomList.indexOf(room);
 	}
 }

@@ -70,8 +70,6 @@ public class Server extends Thread {
 				}
 				// game room을 만들어주는 요청
 				if (message.equals("createGameRoom")) {
-
-					//sendMessage("roomNumber " + numberOfRoom);
 					chatRoom.exitRoom(this);
 					continue;
 				}

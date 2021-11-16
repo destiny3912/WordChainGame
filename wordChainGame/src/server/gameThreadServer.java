@@ -21,17 +21,15 @@ public class gameThreadServer extends Thread{
 	private BufferedWriter bw = null;
 	private String strId = null;
 	private Socket socket = null;
-	private Connection con = null;
-	private String userName = "root";
-	private String password = "Destiny3910!";
-	private String address = "jdbc:mysql://localhost:3306/nwproject?useUnicode=true&characterEncoding=utf8";
 	private gameRoom room = null;
+	private DBServer DB = null;
 	
 	//서버를 생성할때 socket을 받아 stream을 establish합니다.
 	public gameThreadServer(Socket socket, gameRoom room)
 	{
 		this.socket = socket;
 		this.room = room;
+		this.DB = new DBServer();
 		
 		try {
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -39,13 +37,13 @@ public class gameThreadServer extends Thread{
 		} catch (IOException e) { }
 	}
 	
-	public gameThreadServer(BufferedReader br,BufferedWriter bw , gameRoom room)
+	/*public gameThreadServer(BufferedReader br, BufferedWriter bw, gameRoom room)
 	{
 		this.room = room;
+		this.DB = new DBServer();
 		this.br = br;
 		this.bw = bw;
-	}
-	
+	}*/
 	@Override
 	public void run() {
 		
@@ -102,8 +100,8 @@ public class gameThreadServer extends Thread{
 				else if("iWin".equalsIgnoreCase(tokens[0]))
 				{
 					String query;
-					query = "UPDATE userinfo SET win = win + 1 WHERE ID = tokens[1]";
-					insertDB(query);
+					query = "UPDATE userinfo SET win = win + 1 WHERE ID =?";
+					DB.updateScore(query, strId);
 					tokens = null;
 					//DB에 tokens[1]을 이름으로하는 플레이어의 승리 카운트 + 1
 				}
@@ -111,8 +109,8 @@ public class gameThreadServer extends Thread{
 				{
 					room.broadcast("end");
 					String query;
-					query = "UPDATE userinfo SET lose = lose + 1 WHERE ID = tokens[1]";
-					insertDB(query);
+					query = "UPDATE userinfo SET lose = lose + 1 WHERE ID =?";
+					DB.updateScore(query, strId);
 					tokens = null;
 					//DB에 tokens[1]을 이름으로하는 플레이어의 패배 카운트 + 1
 				}
@@ -120,11 +118,31 @@ public class gameThreadServer extends Thread{
 				{
 					strId = tokens[1];
 					room.broadcast("otherID:" + strId);
+					sendMessage("roomNumber:" + room.getRoomNumber());
+					
+					String query = "SELECT win, lose FROM userinfo WHERE ID = " + "'" + strId + "'";
+					
+					ArrayList<String> result = DB.selectScore(query);
+					
+					sendMessage("total:Score = "+ result.get(0) + "-" + result.get(1));
 					tokens = null;
+				}
+				else if("giveMyName".equalsIgnoreCase(tokens[0]))
+				{
+					room.broadcast("giveOnwerName:" + tokens[1]);
 				}
 				else if("timeOver".equalsIgnoreCase(tokens[0]))
 				{
 					room.broadcast("timeOver:" + tokens[2]);
+				}
+				else if("chatText".equalsIgnoreCase(tokens[0]))
+				{
+					room.broadcast("otherChat:" + tokens[1] + ":" + tokens[2]);
+				}
+				else if("serverClose".equalsIgnoreCase(tokens[0]))
+				{
+					System.out.println("Stream disconnected with " + tokens[1]);
+					room.exitRoom(this);
 				}
 				req = "";
 			}
@@ -133,41 +151,7 @@ public class gameThreadServer extends Thread{
 		}
 	}
 	
-	private void insertDB(String query)
-	{
-		Statement state = null;
-		
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection(address, userName, password);
-			
-			state = con.createStatement();
-			state.executeUpdate(query);
-		}catch(ClassNotFoundException e) {
-			
-		}catch(SQLException e) {
-			System.out.println("DB계정ERROR in gameThreadServer");
-		}finally {
-			
-			try {
-				if(state != null)
-				{
-					state.close();
-					con.close();
-				}
-					
-			}catch(SQLException e1) {
-				
-			}
-			
-			try {
-				if(con != null)
-					con.close();
-			}catch(SQLException e1) {
-				
-			}
-		}
-	}
+	
 	
 	public void sendMessage(String message) {
 		try {

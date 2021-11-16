@@ -1,6 +1,10 @@
 package server;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -14,7 +18,9 @@ public class gameServer extends Thread
 	int portNumber = 3100; // port 번호
 	int clientNumber = -1;
 	int roomNumber = -1;
-
+	private BufferedReader br = null;
+	private BufferedWriter bw = null;
+	
 	public gameServer(gameRoomManager roomList) 
 	{
 		this.roomList = roomList;
@@ -47,7 +53,7 @@ public class gameServer extends Thread
 				//방을 만들어 들어가는 클라이언트의 요청일경우
 				else
 				{
-					gameRoom room = new gameRoom();
+					gameRoom room = new gameRoom(roomList);
 					roomList.addRoom(room);
 					server = new gameThreadServer(socket, room);
 					room.enterRoom(server);
