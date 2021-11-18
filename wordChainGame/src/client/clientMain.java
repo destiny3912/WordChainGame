@@ -42,6 +42,7 @@ public class clientMain {
 			loginSection = new login(socket, new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),new BufferedReader(new InputStreamReader(socket.getInputStream())));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("인터넷 상태를 확인해 주세요.");
 			e.printStackTrace();
 		}
 		loginSection.setWindow();
