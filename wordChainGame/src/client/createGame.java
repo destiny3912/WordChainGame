@@ -48,14 +48,15 @@ public class createGame extends CFrame{
 		JTextField userName = new JTextField("Enter room number");
 		userName.setColumns(20);
 		userNamePane.add(userName);
+		JButton enter = new JButton("Enter Game");
+		userNamePane.add(enter);
 		
 		//방을 만드는 버튼
 		JButton create = new JButton("Create Game");
 		buttonPane.add(create);
 		//방을 만드는 작업을 중지하고 waiting으로 돌아가는 버튼
-		JButton enter = new JButton("Enter Game");
-		buttonPane.add(enter);
-		JButton cancle = new JButton("Cancle");
+
+		JButton cancle = new JButton("Cancel");
 		buttonPane.add(cancle);
 		
 		create.addActionListener(new CActionListener(super.bw, super.br) {
