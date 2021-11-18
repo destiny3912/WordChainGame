@@ -121,6 +121,12 @@ public class Server extends Thread {
 				String id = register(tokens);
 				sendMessage("REG " + id);
 				return false;	// 회원가입 후 다시 로그인으로 돌아감
+			} else if (tokens[0].equals("REL"))	{
+				result = reAuth(tokens);
+				if(result.equals("FAL"))	{
+					sendMessage("FAL");
+					return false;
+				}
 			}
 			
 			String resultTokens[] = result.split(" ");
@@ -239,6 +245,58 @@ public class Server extends Thread {
 		}
 		return name;
 	}
+	
+	// reAuth : 대기실로 돌아가기 (Nickname으로 Auth)
+		// 로그인 성공시 WEL nickName 반환
+		// 실패시 FAL 반환
+		public String reAuth(String[] tokens) {
+			String result = "FAL";
+			Connection con = null;
+			Statement stmt = null;
+			ResultSet rs = null;
+
+			/**/
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				con = DriverManager.getConnection(address, userName, password);
+				System.out.println(con);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			try {
+				stmt = con.createStatement();
+				String sql = "select nickName from userinfo where nickName='" + tokens[1] + "'";
+				rs = stmt.executeQuery(sql);
+
+				while (rs.next()) {
+					String nickName = rs.getString(1);
+					if (rs.wasNull()) {
+						nickName = "null";
+						result = "FAL";
+					}
+					else {
+						result = "WEL " + nickName;
+					}
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+
+			try {
+				if (stmt != null && !stmt.isClosed()) {
+					stmt.close();
+				}
+				if (rs != null && !rs.isClosed()) {
+					rs.close();
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			return result;
+		}
 	
 	// 메세지 전송
 	public void sendMessage(String message) {

@@ -173,20 +173,53 @@ public class game extends CFrame{
 				Socket chatSocket = null;
 				
 				try {
-					this.br.close();
-					this.bw.close();
-					this.socket.close();
-					chatSocket = new Socket(chatIpNumber, chatPortNumber);
+					if (super.br != null) super.br.close();
+					if (super.bw != null) super.bw.close();
+					if (super.socket != null) super.socket.close();
 				}catch(UnknownHostException e1) {
-					
 				}catch(IOException e1) {
-					
 				}
 				
-				waiting waitingSection = new waiting(socket, super.bw, super.br, playerName);
+				try {
+					chatSocket = new Socket(chatIpNumber, chatPortNumber);
+					System.out.println(chatSocket);
+				} catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		
 				
-				waitingSection.setWindow();
-				mainWindow.dispose();
+				BufferedWriter chatBw = null;
+				BufferedReader chatBr = null;
+				
+				String q = "REL " + playerName;
+				String result = "";
+				try {
+					chatBw = new BufferedWriter(new OutputStreamWriter(chatSocket.getOutputStream()));
+					chatBr = new BufferedReader(new InputStreamReader(chatSocket.getInputStream()));
+					chatBw.write(q + "\n");
+					chatBw.flush();
+					result = chatBr.readLine();
+				} catch (IOException ex)	{
+					ex.printStackTrace();
+					System.out.println("Waiting으로 돌아가기 위해 Stream 여는 중 Exception 발생");
+				}
+				
+				if (result.substring(0, 3).equals("WEL")) {
+					String resultTokens[] = result.split(" ");
+					playerName = new String(resultTokens[1]);
+					waiting waitingSection = new waiting(chatSocket, chatBw, chatBr, playerName);
+					System.out.println(playerName);
+					waitingSection.setWindow();
+					mainWindow.dispose();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "알 수 없는 오류.", "오류", JOptionPane.ERROR_MESSAGE); 
+				}
+
 			}
 		});
 		
