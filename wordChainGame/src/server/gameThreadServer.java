@@ -120,10 +120,10 @@ public class gameThreadServer extends Thread{
 					room.broadcast("otherID:" + strId);
 					sendMessage("roomNumber:" + room.getRoomNumber());
 					
-					String query = "SELECT win, lose FROM userinfo WHERE ID = " + "'" + strId + "'";
+					String query = "SELECT win, lose FROM userinfo WHERE nickName = " + "'" + strId + "'";
 					
 					ArrayList<String> result = DB.selectScore(query);
-					
+				 
 					sendMessage("total:Score = "+ result.get(0) + "-" + result.get(1));
 					tokens = null;
 				}
