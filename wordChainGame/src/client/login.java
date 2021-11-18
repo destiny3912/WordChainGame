@@ -112,40 +112,40 @@ public class login extends CFrame{
 				String result = "";
 				String id = "";
 				String q;
-				do {
-					
-					q = "LOG " + ID.getText().replaceAll(" ", "") + " ";	
-					
-			        SHA256 sha256 = new SHA256();
-					try {
-						q += sha256.encrypt(PW.getText().replaceAll(" ", ""));
-					} catch (NoSuchAlgorithmException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
 
-					try {
-						bw.write(q + "\n");
-						bw.flush();
-						result = br.readLine();
-						if(result.equals("FAL"))	{
-							JOptionPane.showMessageDialog(null, "ID와 비밀번호를 확인 후 다시 시도해 주세요.", "로그인 실패", JOptionPane.ERROR_MESSAGE); 
-						}
-						else {
-							String resultTokens[] = result.split(" ");
-							id = new String(resultTokens[1]);
-						}
+					
+				q = "LOG " + ID.getText().replaceAll(" ", "") + " ";	
+				
+		        SHA256 sha256 = new SHA256();
+				try {
+					q += sha256.encrypt(PW.getText().replaceAll(" ", ""));
+				} catch (NoSuchAlgorithmException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				try {
+					bw.write(q + "\n");
+					bw.flush();
+					result = br.readLine();
+					if(result.equals("FAL"))	{
+						JOptionPane.showMessageDialog(null, "ID와 비밀번호를 확인 후 다시 시도해 주세요.", "로그인 실패", JOptionPane.ERROR_MESSAGE); 
 					}
-					catch (Exception ex) {
-						ex.printStackTrace();
-					}					
-				} while (!result.substring(0, 3).equals("WEL"));
-				
-				waiting waitingSection = new waiting(socket, super.bw, super.br, id);	// 여기서 ID는 닉네임입니다.
-				
-				waitingSection.setWindow();
-				mainWindow.dispose();
-				
+					else if (result.substring(0, 3).equals("WEL")) {
+						
+						String resultTokens[] = result.split(" ");
+						id = new String(resultTokens[1]);
+						waiting waitingSection = new waiting(socket, super.bw, super.br, id);	// 여기서 ID는 닉네임입니다.
+						waitingSection.setWindow();
+						mainWindow.dispose();
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "알 수 없는 오류.", "로그인 실패", JOptionPane.ERROR_MESSAGE); 
+					}
+				}
+				catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		});
 		
