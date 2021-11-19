@@ -153,16 +153,17 @@ public class register extends CFrame{
 				
 		        SHA256 sha256 = new SHA256();
 				try {
-					q += sha256.encrypt(PW.getText().replaceAll(" ", ""));
+					q += sha256.encrypt(PW.getText().replaceAll(" ", "")) + " ";
 				} catch (NoSuchAlgorithmException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
 				q += NickName.getText().replaceAll(" ", "") + " " +
 					Name.getText().replaceAll(" ", "") + " " +
 					EMail.getText().replaceAll(" ", "") + " " +
 					SNS.getText().replaceAll(" ", "");
-							
+				
 				try {
 					bw.write(q + "\n");
 					bw.flush();
