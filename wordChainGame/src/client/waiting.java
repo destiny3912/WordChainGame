@@ -122,13 +122,12 @@ public class waiting extends CFrame{
 			public void actionPerformed(ActionEvent e)
 			{
 				createGame creator = new createGame(socket, super.bw, super.br, id);
-				
+
 				creator.setWindow();
 				mainWindow.dispose();
 			}
-			
+
 		});
-		
 	}
 	
 	public static void main(String[] args) {
