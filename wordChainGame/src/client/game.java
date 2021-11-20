@@ -17,8 +17,8 @@ import java.util.TimerTask;
 public class game extends CFrame{
 	
 	private Socket socket = null;
-	private String ipNumber = "localhost";//게임서버 ip
-	private String chatIpNumber = "localhost"; //채팅서버 ip
+	private String ipNumber = "61.105.41.195";//게임서버 ip
+	private String chatIpNumber = "61.105.41.195"; //채팅서버 ip
 	private int chatPortNumber = 3000;// 채팅서버 포트
 	private int portNumber = 3100;//게임서버 포트
 	BufferedReader br = null;

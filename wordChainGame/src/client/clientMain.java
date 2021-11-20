@@ -21,7 +21,7 @@ public class clientMain {
 	public static void main(String[] args) {
 		
 		Socket socket = null;
-		String ipNumber = "localhost";
+		String ipNumber = "61.105.41.195";
 		int portNumber = 3000;
 		
 		// User usr = new User(socket, null);
