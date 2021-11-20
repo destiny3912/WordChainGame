@@ -84,7 +84,7 @@ public class gameThreadServer extends Thread{
 					
 					room.broadcast("src:" + srcPlayer + ":" + ans);
 						//정답인경우
-						if(prev.charAt(prev.length() - 1) == ans.charAt(0))
+						if(prev.charAt(prev.length() - 1) == ans.charAt(0) || prev.equalsIgnoreCase("first"))
 						{
 							room.broadcast("correct:" + ans);
 						}

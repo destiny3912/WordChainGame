@@ -7,7 +7,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -18,10 +17,10 @@ import java.util.TimerTask;
 public class game extends CFrame{
 	
 	private Socket socket = null;
-	private String ipNumber = "127.0.0.1";
-	private String chatIpNumber = "127.0.0.1"; //채팅서버 ip
+	private String ipNumber = "localhost";//게임서버 ip
+	private String chatIpNumber = "localhost"; //채팅서버 ip
 	private int chatPortNumber = 3000;// 채팅서버 포트
-	private int portNumber = 3100;
+	private int portNumber = 3100;//게임서버 포트
 	BufferedReader br = null;
 	BufferedWriter bw = null;
 	
@@ -29,7 +28,7 @@ public class game extends CFrame{
 	private JFrame mainWindow = new JFrame();
 	private String playerName;
 	private String otherPlayer;
-	private String prevWord = "가";
+	private String prevWord = "first";
 	private int isWin = 1;// 1이면 이긴것 0이면 진것
 	private int isMyturn = 0;// 1이면 자신의 턴, 0이면 상대방턴
 	
@@ -423,7 +422,7 @@ public class game extends CFrame{
 							timer.setText("상대턴");
 							String answer = msgForm.getText();
 							msgForm.setText("");
-							textForm.append(playerName + " : " + answer + ":" + prevWord + "\n");
+							textForm.append(playerName + " : " + answer + "\n");
 							System.out.println(answer);
 							sendMsg(answer + ":" + prevWord + ":" + playerName, "answer");
 							prevWord = answer;

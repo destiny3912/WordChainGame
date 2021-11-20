@@ -14,10 +14,15 @@ import java.util.ArrayList;
  * written by ¿Ã¡ˆ»£
  * */
 public class DBServer {
-	
-	private String userName = "root";
+	/*
+	private String userName = "destiny3912";
 	private String password = "Destiny3910!";
-	private String address = "jdbc:mysql://localhost:3306/nwproject?useUnicode=true&characterEncoding=utf8";
+	private String address = "jdbc:mysql://ljhhosting.com:3306/NWProject?useSSL=false&useUnicode=true&characterEncoding=utf8";
+	*/
+	
+	private String userName = "destiny3912";
+	private String password = "Destiny3910!";
+	private String address = "jdbc:mysql://localhost:3306/NWProject?useSSL=false&useUnicode=true&characterEncoding=utf8";
 	
 	public void updateScore(String psql, String name)
 	{
