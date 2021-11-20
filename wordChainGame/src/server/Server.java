@@ -22,9 +22,14 @@ public class Server extends Thread {
 	int numberOfRoom = -1;
 
 	/* About DB */
-	private String userName = "root";
+	//라즈베리파이 서버 DB
+	private String userName = "destiny3912";
 	private String password = "Destiny3910!";
-	private String address = "jdbc:mysql://localhost:3306/nwproject?useUnicode=true&characterEncoding=utf8";
+	private String address = "jdbc:mysql://ljhhosting.com:3306/NWProject?useSSL=false&useUnicode=true&characterEncoding=utf8";
+	//Test용 Local DB
+	/*private String userName = "root";
+	private String password = "Destiny3910!";
+	private String address = "jdbc:mysql://localhost:3306/nwproject?useUnicode=true&characterEncoding=utf8";*/
 	/**/
 
 	public Server(Socket tmpSocket, ChatRoom tmpChatRoom, gameRoomManager roomList) {
