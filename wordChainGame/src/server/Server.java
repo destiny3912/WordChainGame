@@ -90,15 +90,16 @@ public class Server extends Thread {
 
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
-			System.out.println("예외발생");
+			System.out.println("Exception 발생");
 		} finally {
 			chatRoom.exitRoom(this);
+			// DEU 필요함		
+			chatRoom.broadCasting("DEU " + strId);
 			try {
 				br.close();
 				bw.close();
-				socket.close();
-				// DEU 필요함
-			} catch (Exception e) {
+				socket.close();	
+				} catch (Exception e) {
 			}
 			System.out.println("Server.java 종료 (Client가 연결을 종료했습니다)");
 		}
@@ -158,7 +159,6 @@ public class Server extends Thread {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection(address, userName, password);
-			System.out.println(con);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -220,14 +220,12 @@ public class Server extends Thread {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection(address, userName, password);
-			System.out.println(con);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			System.out.println("DB계정오류");
 			e.printStackTrace();
 		}
-		
 		try {
 			String psql = "insert into userinfo(ID, PW, nickName, name, Email, SNS) values (?, ?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(psql);
@@ -264,7 +262,6 @@ public class Server extends Thread {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
 				con = DriverManager.getConnection(address, userName, password);
-				System.out.println(con);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (SQLException e) {

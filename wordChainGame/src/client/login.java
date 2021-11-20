@@ -135,6 +135,7 @@ public class login extends CFrame{
 						
 						String resultTokens[] = result.split(" ");
 						id = new String(resultTokens[1]);
+						System.out.println("[로그인 성공] " + id + "로 로그인에 성공했습니다." );
 						waiting waitingSection = new waiting(socket, super.bw, super.br, id);	// 여기서 ID는 닉네임입니다.
 						waitingSection.setWindow();
 						mainWindow.dispose();
