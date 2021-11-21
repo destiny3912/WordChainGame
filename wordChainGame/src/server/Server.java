@@ -22,12 +22,12 @@ public class Server extends Thread {
 	int numberOfRoom = -1;
 
 	/* About DB */
-	//¶óÁîº£¸®ÆÄÀÌ DB Å×½ºÆ®¿ë
+	//ë¼ì¦ˆë² ë¦¬íŒŒì´ DB í…ŒìŠ¤íŠ¸ìš©
 	/*private String userName = "destiny3912";
 	private String password = "Destiny3910!";
 	private String address = "jdbc:mysql://ljhhosting.com:3306/NWProject?useSSL=false&useUnicode=true&characterEncoding=utf8";
 	*/
-	//¼­¹ö ¿Ã¶ó°¥¶§ »ç¿ë
+	//ì„œë²„ ì˜¬ë¼ê°ˆë•Œ ì‚¬ìš©
 	private String userName = "destiny3912";
 	private String password = "Destiny3910!";
 	private String address = "jdbc:mysql://localhost:3306/NWProject?useUnicode=true&characterEncoding=utf8";
@@ -39,7 +39,7 @@ public class Server extends Thread {
 		chatRoom = tmpChatRoom;
 		this.roomList = roomList;
 		
-		// 1. ÀÔ/Ãâ·Â Stream »ı¼º
+		// 1. ì…/ì¶œë ¥ Stream ìƒì„±
 		try {
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -51,7 +51,7 @@ public class Server extends Thread {
 		String message = "";
 		Boolean isLogin = false;
 
-		// 1. ·Î±×ÀÎ Ã³¸®(Client ¾ÆÀÌµğ ¹Ş¾Æ¿À±â)
+		// 1. ë¡œê·¸ì¸ ì²˜ë¦¬(Client ì•„ì´ë”” ë°›ì•„ì˜¤ê¸°)
 		do {
 			isLogin = login();
 		} while (!isLogin);
@@ -59,7 +59,7 @@ public class Server extends Thread {
 		try {
 			while (!message.equals("bye")) {
 
-				// 4. Client °¡ º¸³½ ¸Ş½ÃÁö ¹ŞÀº ÈÄ Server ¿¡¼­ Ãâ·Â
+				// 4. Client ê°€ ë³´ë‚¸ ë©”ì‹œì§€ ë°›ì€ í›„ Server ì—ì„œ ì¶œë ¥
 				message = br.readLine();
 				if(message == null)
 				{
@@ -67,34 +67,34 @@ public class Server extends Thread {
 					continue;
 				}
 					
-				// ¹ŞÀº ¸Ş½ÃÁöÃâ·Â
-				System.out.println("[¹ŞÀº ¸Ş½ÃÁö] " + strId + " : " + message);
+				// ë°›ì€ ë©”ì‹œì§€ì¶œë ¥
+				System.out.println("[ë°›ì€ ë©”ì‹œì§€] " + strId + " : " + message);
 
-				// bye ÀÔ·Â ½Ã ¼­¹ö ³ª°¨
+				// bye ì…ë ¥ ì‹œ ì„œë²„ ë‚˜ê°
 				if (message.equals("bye")) {
 					chatRoom.broadCasting("DEU " + strId);
 				}
-				// game roomÀ» ¸¸µé¾îÁÖ´Â ¿äÃ»
+				// game roomì„ ë§Œë“¤ì–´ì£¼ëŠ” ìš”ì²­
 				if (message.equals("createGameRoom")) {
 					chatRoom.exitRoom(this);
 					continue;
 				}
-				// ¸¸µé¾îÁ® ÀÖ´Â game room¿¡ µé¾î°¡´Â ¿äÃ»
+				// ë§Œë“¤ì–´ì ¸ ìˆëŠ” game roomì— ë“¤ì–´ê°€ëŠ” ìš”ì²­
 				if (message.equals("enterRoom")) {	
 					chatRoom.exitRoom(this);
 					continue;
 				}
-				// 5. ¸ğµç Client ¿¡°Ô ¸Ş½ÃÁö Àü¼Û
+				// 5. ëª¨ë“  Client ì—ê²Œ ë©”ì‹œì§€ ì „ì†¡
 				chatRoom.broadCasting("MSG " + strId + " : " + message);
 
 			}
 
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
-			System.out.println("Exception ¹ß»ı");
+			System.out.println("Exception ë°œìƒ");
 		} finally {
 			chatRoom.exitRoom(this);
-			// DEU ÇÊ¿äÇÔ		
+			// DEU í•„ìš”í•¨		
 			chatRoom.broadCasting("DEU " + strId);
 			try {
 				br.close();
@@ -102,18 +102,18 @@ public class Server extends Thread {
 				socket.close();	
 				} catch (Exception e) {
 			}
-			System.out.println("Server.java Á¾·á (Client°¡ ¿¬°áÀ» Á¾·áÇß½À´Ï´Ù)");
+			System.out.println("Server.java ì¢…ë£Œ (Clientê°€ ì—°ê²°ì„ ì¢…ë£Œí–ˆìŠµë‹ˆë‹¤)");
 		}
 	}
 
-	// ·Î±×ÀÎ (Client ¿¡¼­ Server ·Î ID Àü¼ÛÇØ¼­ ¹ŞÀ½)
+	// ë¡œê·¸ì¸ (Client ì—ì„œ Server ë¡œ ID ì „ì†¡í•´ì„œ ë°›ìŒ)
 	public boolean login() {
 
 		try {
 			System.out.println("[Get Client ID...]");
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			// Client °¡ ÀÔ·ÂÇÑ ID ¹Ş¾Æ¿À±â
+			// Client ê°€ ì…ë ¥í•œ ID ë°›ì•„ì˜¤ê¸°
 			String message = br.readLine(); 
 			String tokens[] = message.split(" ");
 			String result = null;
@@ -127,7 +127,7 @@ public class Server extends Thread {
 			else if (tokens[0].equals("REG")) {
 				String id = register(tokens);
 				sendMessage("REG " + id);
-				return false;	// È¸¿ø°¡ÀÔ ÈÄ ´Ù½Ã ·Î±×ÀÎÀ¸·Î µ¹¾Æ°¨
+				return false;	// íšŒì›ê°€ì… í›„ ë‹¤ì‹œ ë¡œê·¸ì¸ìœ¼ë¡œ ëŒì•„ê°
 			} else if (tokens[0].equals("REL"))	{
 				result = reAuth(tokens);
 				if(result.equals("FAL"))	{
@@ -137,7 +137,7 @@ public class Server extends Thread {
 			}
 			
 			String resultTokens[] = result.split(" ");
-			// 3. Á¢¼ÓÀÚ ¼ö º¸¿©ÁÖ±â
+			// 3. ì ‘ì†ì ìˆ˜ ë³´ì—¬ì£¼ê¸°
 			this.strId = resultTokens[1];
 			String userlistStr = chatRoom.display();
 			sendMessage("WEL " + resultTokens[1]);
@@ -148,8 +148,8 @@ public class Server extends Thread {
 	
 	
 	// Auth : Auth User
-	// ·Î±×ÀÎ ¼º°ø½Ã WEL nickName ¹İÈ¯
-	// ½ÇÆĞ½Ã FAL ¹İÈ¯
+	// ë¡œê·¸ì¸ ì„±ê³µì‹œ WEL nickName ë°˜í™˜
+	// ì‹¤íŒ¨ì‹œ FAL ë°˜í™˜
 	public String auth(String[] tokens) {
 		String result = "FAL";
 		Connection con = null;
@@ -211,9 +211,9 @@ public class Server extends Thread {
 	}
 	
 	// register : Insert New User to DB
-	/* ID, PW, NickName, Name, EMail, SNS ¼øÀÔ´Ï´Ù */
-	// È¸¿ø°¡ÀÔ ¼º°ø½Ã ID¸¦ ¹İÈ¯
-	// ±× ¿Ü nullÀ» ¹İÈ¯
+	/* ID, PW, NickName, Name, EMail, SNS ìˆœì…ë‹ˆë‹¤ */
+	// íšŒì›ê°€ì… ì„±ê³µì‹œ IDë¥¼ ë°˜í™˜
+	// ê·¸ ì™¸ nullì„ ë°˜í™˜
 	public String register(String[] tokens) {
 		String name = null;
 		Connection con = null;
@@ -224,7 +224,7 @@ public class Server extends Thread {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
-			System.out.println("DB°èÁ¤¿À·ù");
+			System.out.println("DBê³„ì •ì˜¤ë¥˜");
 			e.printStackTrace();
 		}
 		try {
@@ -235,7 +235,7 @@ public class Server extends Thread {
 			}
 			int count = pstmt.executeUpdate();
 			if (count == 1)	{
-				name = tokens[1];	// È¸¿ø°¡ÀÔ ¼º°ø½Ã °¡ÀÔ ID¸¦ ¸®ÅÏÇØÁÖ±â À§ÇØ¼­
+				name = tokens[1];	// íšŒì›ê°€ì… ì„±ê³µì‹œ ê°€ì… IDë¥¼ ë¦¬í„´í•´ì£¼ê¸° ìœ„í•´ì„œ
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -250,9 +250,9 @@ public class Server extends Thread {
 		return name;
 	}
 	
-	// reAuth : ´ë±â½Ç·Î µ¹¾Æ°¡±â (NicknameÀ¸·Î Auth)
-		// ·Î±×ÀÎ ¼º°ø½Ã WEL nickName ¹İÈ¯
-		// ½ÇÆĞ½Ã FAL ¹İÈ¯
+	// reAuth : ëŒ€ê¸°ì‹¤ë¡œ ëŒì•„ê°€ê¸° (Nicknameìœ¼ë¡œ Auth)
+		// ë¡œê·¸ì¸ ì„±ê³µì‹œ WEL nickName ë°˜í™˜
+		// ì‹¤íŒ¨ì‹œ FAL ë°˜í™˜
 		public String reAuth(String[] tokens) {
 			String result = "FAL";
 			Connection con = null;
@@ -301,7 +301,7 @@ public class Server extends Thread {
 			return result;
 		}
 	
-	// ¸Ş¼¼Áö Àü¼Û
+	// ë©”ì„¸ì§€ ì „ì†¡
 	public void sendMessage(String message) {
 		try {
 			bw.write(message + "\n");

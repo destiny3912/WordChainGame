@@ -17,10 +17,10 @@ import java.util.TimerTask;
 public class game extends CFrame{
 	
 	private Socket socket = null;
-	private String ipNumber = "61.105.41.195";//°ÔÀÓ¼­¹ö ip
-	private String chatIpNumber = "61.105.41.195"; //Ã¤ÆÃ¼­¹ö ip
-	private int chatPortNumber = 3000;// Ã¤ÆÃ¼­¹ö Æ÷Æ®
-	private int portNumber = 3100;//°ÔÀÓ¼­¹ö Æ÷Æ®
+	private String ipNumber = "61.105.41.195";//ê²Œì„ì„œë²„ ip
+	private String chatIpNumber = "61.105.41.195"; //ì±„íŒ…ì„œë²„ ip
+	private int chatPortNumber = 3000;// ì±„íŒ…ì„œë²„ í¬íŠ¸
+	private int portNumber = 3100;//ê²Œì„ì„œë²„ í¬íŠ¸
 	BufferedReader br = null;
 	BufferedWriter bw = null;
 	
@@ -29,27 +29,27 @@ public class game extends CFrame{
 	private String playerName;
 	private String otherPlayer;
 	private String prevWord = "first";
-	private int isWin = 1;// 1ÀÌ¸é ÀÌ±ä°Í 0ÀÌ¸é Áø°Í
-	private int isMyturn = 0;// 1ÀÌ¸é ÀÚ½ÅÀÇ ÅÏ, 0ÀÌ¸é »ó´ë¹æÅÏ
+	private int isWin = 1;// 1ì´ë©´ ì´ê¸´ê²ƒ 0ì´ë©´ ì§„ê²ƒ
+	private int isMyturn = 0;// 1ì´ë©´ ìì‹ ì˜ í„´, 0ì´ë©´ ìƒëŒ€ë°©í„´
 	
-	private JLabel timer = new JLabel("10ÃÊ ³²À½");
+	private JLabel timer = new JLabel("10ì´ˆ ë‚¨ìŒ");
 	private JTextArea textForm = new JTextArea(50, 50);
 	private JTextArea chatForm = new JTextArea(50, 50);
-	private JTextArea msgForm = new JTextArea(1, 40);//ÀÔ·ÂÃ¢
+	private JTextArea msgForm = new JTextArea(1, 40);//ì…ë ¥ì°½
 	private JTextArea chatMsgForm = new JTextArea(1, 40);
-	JLabel title = new JLabel("»ó´ë¹æ ´ë±âÁß");
+	JLabel title = new JLabel("ìƒëŒ€ë°© ëŒ€ê¸°ì¤‘");
 	private JPanel headerPanel = new JPanel();
 	private JPanel contentPanel = new JPanel();
 	private JPanel contentResultPanel = new JPanel();
 	private JPanel btnPanel = new JPanel();
 	private JPanel footerPanel = new JPanel();
-	private JButton exitBtn = new JButton("Á¾·á");
-	private JButton Return = new JButton("´ë±â½Ç·Î");//Return ¹öÆ°
-	private JButton sendBtn = new JButton("Àü¼Û");
-	private JButton chatBtn = new JButton("Àü¼Û");
+	private JButton exitBtn = new JButton("ì¢…ë£Œ");
+	private JButton Return = new JButton("ëŒ€ê¸°ì‹¤ë¡œ");//Return ë²„íŠ¼
+	private JButton sendBtn = new JButton("ì „ì†¡");
+	private JButton chatBtn = new JButton("ì „ì†¡");
 	private JLabel resultTitle = new JLabel("");
 	private JLabel resultContent = new JLabel("");
-	private JLabel record = new JLabel("ÀüÀû : N/A");
+	private JLabel record = new JLabel("ì „ì  : N/A");
 	
 	public game(String id)
 	{
@@ -82,19 +82,19 @@ public class game extends CFrame{
 		returnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
 		// USER ID
-		title.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 20));
+		title.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 20));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		titlePanel.add(title);
 		
-		// ÀüÀû
-		record.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 12));
+		// ì „ì 
+		record.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 12));
 		record.setHorizontalAlignment(SwingConstants.CENTER);
 		titlePanel.add(record);
 		headerPanel.add(titlePanel);
 		
 		// Timer
 		timer.setHorizontalAlignment(SwingConstants.CENTER);
-		timer.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 20));
+		timer.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 20));
 		headerPanel.add(timer);
 		returnPanel.add(Return);
 		headerPanel.add(returnPanel);
@@ -104,8 +104,8 @@ public class game extends CFrame{
 		textForm.setBackground(Color.WHITE);
 		textForm.setEditable(false);
 		chatForm.setEditable(false);
-		textForm.setText("³¡¸»ÀÕ±â Á¤´äÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä\n");
-		chatForm.setText("Ã¤ÆÃÀ» ÀÔ·ÂÇØ ÁÖ¼¼¿ä\n");
+		textForm.setText("ëë§ì‡ê¸° ì •ë‹µì„ ì…ë ¥í•´ì£¼ì„¸ìš”\n");
+		chatForm.setText("ì±„íŒ…ì„ ì…ë ¥í•´ ì£¼ì„¸ìš”\n");
 		contentPanel.add(textForm);
 		contentPanel.add(chatForm);
 		
@@ -114,13 +114,13 @@ public class game extends CFrame{
 		
 		resultTitle.setVerticalAlignment(SwingConstants.BOTTOM);
 		resultTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		resultTitle.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 25));
+		resultTitle.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 25));
 		contentResultPanel.add(resultTitle);
 		
 		
 		resultContent.setVerticalAlignment(SwingConstants.TOP);
 		resultContent.setHorizontalAlignment(SwingConstants.CENTER);
-		resultContent.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 20));
+		resultContent.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 20));
 		contentResultPanel.add(resultContent);
 		
 		
@@ -155,18 +155,18 @@ public class game extends CFrame{
 		});
 		
 		/*
-		 * Return¹öÆ°À» ´©¸£¸é ´ë±âÈ­¸éÀ¸·Î µ¹¾Æ°¡°Ô ¼¼ÆÃÇØµÎ¾ú½À´Ï´Ù.
+		 * Returnë²„íŠ¼ì„ ëˆ„ë¥´ë©´ ëŒ€ê¸°í™”ë©´ìœ¼ë¡œ ëŒì•„ê°€ê²Œ ì„¸íŒ…í•´ë‘ì—ˆìŠµë‹ˆë‹¤.
 		 * 
-		 * ¿©±â¿¡¼­ ¹öÆ°À» ´©¸®¸é °ÔÀÓ ¼­¹ö¿ÍÀÇ ½ºÆ®¸²À» ´İ°í Ã¤ÆÃ ¼­¹ö¿ÍÀÇ ½ºÆ®¸²À» ¿­¾î¼­ ¹Ù·Î
-		 * waitingÀ¸·Î ³Ñ¾î°¡°Ô ±¸ÇöÇØ ÁÖ½Ã¸é °¨»çÇÏ°Ú½À´Ï´Ù.
-		 * ±¸Çö¿¡ ÇÊ¿äÇÑ ip¿Í port¹øÈ£´Â ÃÖ»ó´Ü¿¡ ÀÖ½À´Ï´Ù.
+		 * ì—¬ê¸°ì—ì„œ ë²„íŠ¼ì„ ëˆ„ë¦¬ë©´ ê²Œì„ ì„œë²„ì™€ì˜ ìŠ¤íŠ¸ë¦¼ì„ ë‹«ê³  ì±„íŒ… ì„œë²„ì™€ì˜ ìŠ¤íŠ¸ë¦¼ì„ ì—´ì–´ì„œ ë°”ë¡œ
+		 * waitingìœ¼ë¡œ ë„˜ì–´ê°€ê²Œ êµ¬í˜„í•´ ì£¼ì‹œë©´ ê°ì‚¬í•˜ê² ìŠµë‹ˆë‹¤.
+		 * êµ¬í˜„ì— í•„ìš”í•œ ipì™€ portë²ˆí˜¸ëŠ” ìµœìƒë‹¨ì— ìˆìŠµë‹ˆë‹¤.
 		 * */
 		Return.addActionListener(new CActionListener(super.bw, super.br) {
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// ¼­¹ö¸¦ ´İ´Â´Ù´Â ¸Ş¼¼ÁöÀÌ¸ç ¹æ¿¡¼­ ³ª°¡´Â ÀÛ¾÷µµ º´ÇàÇÕ´Ï´Ù.
+				// ì„œë²„ë¥¼ ë‹«ëŠ”ë‹¤ëŠ” ë©”ì„¸ì§€ì´ë©° ë°©ì—ì„œ ë‚˜ê°€ëŠ” ì‘ì—…ë„ ë³‘í–‰í•©ë‹ˆë‹¤.
 				sendMsg(playerName, "serverClose");
 				
 				Socket chatSocket = null;
@@ -204,7 +204,7 @@ public class game extends CFrame{
 					result = chatBr.readLine();
 				} catch (IOException ex)	{
 					ex.printStackTrace();
-					System.out.println("WaitingÀ¸·Î µ¹¾Æ°¡±â À§ÇØ Stream ¿©´Â Áß Exception ¹ß»ı");
+					System.out.println("Waitingìœ¼ë¡œ ëŒì•„ê°€ê¸° ìœ„í•´ Stream ì—¬ëŠ” ì¤‘ Exception ë°œìƒ");
 				}
 				
 				if (result.substring(0, 3).equals("WEL")) {
@@ -216,7 +216,7 @@ public class game extends CFrame{
 					mainWindow.dispose();
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "¾Ë ¼ö ¾ø´Â ¿À·ù.", "¿À·ù", JOptionPane.ERROR_MESSAGE); 
+					JOptionPane.showMessageDialog(null, "ì•Œ ìˆ˜ ì—†ëŠ” ì˜¤ë¥˜.", "ì˜¤ë¥˜", JOptionPane.ERROR_MESSAGE); 
 				}
 
 			}
@@ -266,12 +266,12 @@ public class game extends CFrame{
 							
 							if(isWin == 1)
 							{
-								resultTitle.setText("½Â¸®");
+								resultTitle.setText("ìŠ¹ë¦¬");
 								sendMsg("iWin:" + playerName, "iWin");
 							}
 							else
 							{
-								resultTitle.setText("ÆĞ¹è");
+								resultTitle.setText("íŒ¨ë°°");
 							}
 							
 							headerPanel.remove(timer);
@@ -283,8 +283,8 @@ public class game extends CFrame{
 						}
 						else if("correct".equalsIgnoreCase(tokens[0]))
 						{
-							textForm.append(" Á¤´äÀÔ´Ï´Ù\n");
-							textForm.append("ÅÏ Á¾·á\n");
+							textForm.append(" ì •ë‹µì…ë‹ˆë‹¤\n");
+							textForm.append("í„´ ì¢…ë£Œ\n");
 							sendMsg("turnOver", "turnOver");
 						}
 						else if("wrong".equalsIgnoreCase(msg))
@@ -308,34 +308,34 @@ public class game extends CFrame{
 								sendMsg("iLose:" + playerName, "iLose");
 							}
 						}
-						//¼­¹ö¿¡¼­ ÅÏÀÌ ³Ñ¾î¿ÔÀ½À» ¾Ë·ÁÁÖ´Â °æ¿ì
+						//ì„œë²„ì—ì„œ í„´ì´ ë„˜ì–´ì™”ìŒì„ ì•Œë ¤ì£¼ëŠ” ê²½ìš°
 						else if("isYourTurn".equalsIgnoreCase(msg))
 						{
-							//Á÷ÀüÀÇ ÅÏ Á¾·áÀÚ°¡ ÀÚ½ÅÀÌ ¾Æ´Ò¶§
+							//ì§ì „ì˜ í„´ ì¢…ë£Œìê°€ ìì‹ ì´ ì•„ë‹ë•Œ
 							if(isMyturn == 0)
 							{
 								isMyturn = 1;
 								turnProgress();
 							}
-							//Á÷ÀüÀÇ ÅÏ Á¾·áÀÚ°¡ ÀÚ½ÅÀÏ¶§
+							//ì§ì „ì˜ í„´ ì¢…ë£Œìê°€ ìì‹ ì¼ë•Œ
 							else if(isMyturn == 1)
 							{
 								isMyturn = 0;
 							}
 							
 						}
-						//¹æ ¸¸µé°í »ó´ë¹æÀÌ µé¾î¿Â °æ¿ì
+						//ë°© ë§Œë“¤ê³  ìƒëŒ€ë°©ì´ ë“¤ì–´ì˜¨ ê²½ìš°
 						else if("otherCame".equalsIgnoreCase(msg))
 						{
 							turnInitiallize(0);
 							turnProgress();
 						}
-						//¸¸µé¾îÁø ¹æ¿¡ Âü¿©ÇÑ °æ¿ì
+						//ë§Œë“¤ì–´ì§„ ë°©ì— ì°¸ì—¬í•œ ê²½ìš°
 						else if("enteredAndWait".equalsIgnoreCase(msg))
 						{
 							turnInitiallize(1);
 						}
-						//»ó´ë¹æÀÌ ÀÔ·ÂÇÑ ´ä¾ÈÀ» ¹Ş´Â°æ¿ì
+						//ìƒëŒ€ë°©ì´ ì…ë ¥í•œ ë‹µì•ˆì„ ë°›ëŠ”ê²½ìš°
 						else if("src".equalsIgnoreCase(tokens[0]))
 						{
 							prevWord = tokens[2];
@@ -344,18 +344,18 @@ public class game extends CFrame{
 								textForm.append(tokens[1] + " : " + tokens[2] + "\n");
 							}
 						}
-						//»ó´ë¹æÀÇ ´Ğ³×ÀÓÀ» ¹Ş¾Æ¿À´Â °æ¿ì
+						//ìƒëŒ€ë°©ì˜ ë‹‰ë„¤ì„ì„ ë°›ì•„ì˜¤ëŠ” ê²½ìš°
 						else if("otherID".equalsIgnoreCase(tokens[0]))
 						{
 							if(!playerName.equalsIgnoreCase(tokens[1]))
 							{
 								otherPlayer = tokens[1];
-								textForm.append(otherPlayer + "´ÔÀÌ °ÔÀÓ¿¡ Âü°¡ÇÏ¿´½À´Ï´Ù.\n");
+								textForm.append(otherPlayer + "ë‹˜ì´ ê²Œì„ì— ì°¸ê°€í•˜ì˜€ìŠµë‹ˆë‹¤.\n");
 								title.setText(playerName + " vs. " + otherPlayer);
 								sendMsg(playerName, "giveMyName");
 							}
 						}
-						//¼­¹ö¿¡¼­ »ó´ë¹æ(¹æÀå)ÀÇ ÀÌ¸§À» ÁÙ¶§
+						//ì„œë²„ì—ì„œ ìƒëŒ€ë°©(ë°©ì¥)ì˜ ì´ë¦„ì„ ì¤„ë•Œ
 						else if("giveOnwerName".equalsIgnoreCase(tokens[0]))
 						{
 							if(!playerName.equalsIgnoreCase(tokens[1]))
@@ -364,7 +364,7 @@ public class game extends CFrame{
 								title.setText(playerName + " vs. " + otherPlayer);
 							}
 						}
-						//»ó´ë¹æÀÌ Ã¤ÆÃÀ» ÇßÀ»‹š ¼­¹ö¿¡¼­ ±× ³»¿ëÀ» ¹Ş¾Æ¿À´Â °æ¿ì
+						//ìƒëŒ€ë°©ì´ ì±„íŒ…ì„ í–ˆì„Â‹Âš ì„œë²„ì—ì„œ ê·¸ ë‚´ìš©ì„ ë°›ì•„ì˜¤ëŠ” ê²½ìš°
 						else if("otherChat".equalsIgnoreCase(tokens[0]))
 						{
 							if(!playerName.equalsIgnoreCase(tokens[2]))
@@ -372,12 +372,12 @@ public class game extends CFrame{
 								chatMsgForm.append(tokens[2] + " : " + tokens[1] + "\n");
 							}
 						}
-						//¼­¹ö¿¡¼­ ÀÚ½ÅÀÇ ÀüÀûÀ» ¹Ş¾Æ¿À´Â °æ¿ì
+						//ì„œë²„ì—ì„œ ìì‹ ì˜ ì „ì ì„ ë°›ì•„ì˜¤ëŠ” ê²½ìš°
 						else if("total".equalsIgnoreCase(tokens[0]))
 						{
 							record.setText(tokens[1]);
 						}
-						//ÀÚ½ÅÀÌ µé¾î°£ ¹æÀÇ ¹øÈ£¸¦ ¹Ş¾Æ¿À´Â °æ¿ì
+						//ìì‹ ì´ ë“¤ì–´ê°„ ë°©ì˜ ë²ˆí˜¸ë¥¼ ë°›ì•„ì˜¤ëŠ” ê²½ìš°
 						else if("roomNumber".equalsIgnoreCase(tokens[0]))
 						{
 							mainWindow.setTitle("Game room : " + tokens[1]);
@@ -395,7 +395,7 @@ public class game extends CFrame{
 	}
 	
 	/*
-	 * ÅÏ ÁøÇà ¸Ş¼­µå
+	 * í„´ ì§„í–‰ ë©”ì„œë“œ
 	 * */
 	public void turnProgress()
 	{
@@ -408,7 +408,7 @@ public class game extends CFrame{
 			
 			public void run() {
 				
-				timer.setText(i + "ÃÊ ³²À½");
+				timer.setText(i + "ì´ˆ ë‚¨ìŒ");
 				i--;
 				
 				sendBtn.addActionListener(new ActionListener() {
@@ -419,7 +419,7 @@ public class game extends CFrame{
 						if(flag == 0)
 						{
 							msgForm.setEnabled(false);
-							timer.setText("»ó´ëÅÏ");
+							timer.setText("ìƒëŒ€í„´");
 							String answer = msgForm.getText();
 							msgForm.setText("");
 							textForm.append(playerName + " : " + answer + "\n");
@@ -435,7 +435,7 @@ public class game extends CFrame{
 				
 				if(i < 0)
 				{
-					timer.setText("½Ã°£ÃÊ°ú");
+					timer.setText("ì‹œê°„ì´ˆê³¼");
 					sendMsg("timeOver:" + playerName, "timeOver");
 					msgForm.setEnabled(false);
 					T.cancel();

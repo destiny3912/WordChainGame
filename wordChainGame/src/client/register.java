@@ -1,6 +1,6 @@
 package client;
 /*
- * À¯Àú È¸¿ø°¡ÀÔÀ» À§ÇÑ classÀÔ´Ï´Ù.
+ * ìœ ì € íšŒì›ê°€ì…ì„ ìœ„í•œ classì…ë‹ˆë‹¤.
  *
  * */
 import java.awt.*;
@@ -142,9 +142,9 @@ public class register extends CFrame{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				/* ID, PW, NickName, Name, EMail, SNS ¼øÀÔ´Ï´Ù */
+				/* ID, PW, NickName, Name, EMail, SNS ìˆœì…ë‹ˆë‹¤ */
 				if (!(PW.getText().replaceAll(" ", "").equals(PWCheck.getText().replaceAll(" ", "")))) {
-					JOptionPane.showMessageDialog(null, "ºñ¹Ğ¹øÈ£¶õ°ú ºñ¹Ğ¹øÈ£ È®ÀÎ¶õÀÇ ³»¿ëÀÌ ¼­·Î ´Ù¸¨´Ï´Ù.", "È¸¿ø°¡ÀÔ ½ÇÆĞ", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "ë¹„ë°€ë²ˆí˜¸ë€ê³¼ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ë€ì˜ ë‚´ìš©ì´ ì„œë¡œ ë‹¤ë¦…ë‹ˆë‹¤.", "íšŒì›ê°€ì… ì‹¤íŒ¨", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				String result = "";
@@ -175,13 +175,13 @@ public class register extends CFrame{
 				
 				String tokens[] = result.split(" ");
 				if(tokens[0].equals("REG"))	{
-					JOptionPane.showMessageDialog(null, tokens[1] + "´Ô È¸¿ø°¡ÀÔ¿¡ ¼º°øÇß½À´Ï´Ù.", "È¸¿ø°¡ÀÔ ¼º°ø", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, tokens[1] + "ë‹˜ íšŒì›ê°€ì…ì— ì„±ê³µí–ˆìŠµë‹ˆë‹¤.", "íšŒì›ê°€ì… ì„±ê³µ", JOptionPane.INFORMATION_MESSAGE);
 					System.out.println(super.socket.getInetAddress());
 					login loginSection = new login(super.socket, super.bw, super.br);
 					loginSection.setWindow();
 					mainWindow.dispose();
 				} else {
-					JOptionPane.showMessageDialog(null, "È¸¿ø°¡ÀÔ¿¡ ½ÇÆĞÇß½À´Ï´Ù. ´Ù½Ã ½ÃµµÇØ ÁÖ¼¼¿ä.", "È¸¿ø°¡ÀÔ ½ÇÆĞ", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "íšŒì›ê°€ì…ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì‹œë„í•´ ì£¼ì„¸ìš”.", "íšŒì›ê°€ì… ì‹¤íŒ¨", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

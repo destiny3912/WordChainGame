@@ -8,10 +8,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 /*
- * ÀÌ Å¬·¡½º´Â ÄÚµå°¡ ³Ê¹« ±æ¾îÁ® °¡µ¶¼ºÀ» À§ÇØ ´Ù¸¥ Å¬·¡½º·Î DB Åë½Å °ü·ÃÇÑ ¸Ş¼­µå¸¦ µû·Î •ûµĞ Å¬·¡½º ÀÔ´Ï´Ù.
+ * ì´ í´ë˜ìŠ¤ëŠ” ì½”ë“œê°€ ë„ˆë¬´ ê¸¸ì–´ì ¸ ê°€ë…ì„±ì„ ìœ„í•´ ë‹¤ë¥¸ í´ë˜ìŠ¤ë¡œ DB í†µì‹  ê´€ë ¨í•œ ë©”ì„œë“œë¥¼ ë”°ë¡œ Â•æš³ í´ë˜ìŠ¤ ì…ë‹ˆë‹¤.
  * 
- * µû·Î ´ã´çÇÏ½Å ºÎºĞÀÇ DB Åë½Å ¸Ş¼­µå¸¦ ÀÌ°÷¿¡ ÇÕÄ¡¼Åµµ µÇ°í ¾ÈÇÏ¼Åµµ µË´Ï´Ù.
- * written by ÀÌÁöÈ£
+ * ë”°ë¡œ ë‹´ë‹¹í•˜ì‹  ë¶€ë¶„ì˜ DB í†µì‹  ë©”ì„œë“œë¥¼ ì´ê³³ì— í•©ì¹˜ì…”ë„ ë˜ê³  ì•ˆí•˜ì…”ë„ ë©ë‹ˆë‹¤.
+ * written by ì´ì§€í˜¸
  * */
 public class DBServer {
 	/*
@@ -43,7 +43,7 @@ public class DBServer {
 			
 		}catch(SQLException e) {
 			System.out.println(e.getMessage());
-			System.out.println("DB°èÁ¤ERROR in update");
+			System.out.println("DBê³„ì •ERROR in update");
 		}finally {
 			try {
 				con.close();
@@ -80,7 +80,7 @@ public class DBServer {
 			
 		}catch(SQLException e) {
 			System.out.println(e.getMessage());
-			System.out.println("DB°èÁ¤ERROR in select");
+			System.out.println("DBê³„ì •ERROR in select");
 		}finally {
 			
 			try {

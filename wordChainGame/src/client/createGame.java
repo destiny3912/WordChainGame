@@ -1,6 +1,6 @@
 package client;
 /*
- * »ó´ë¹æÀÇ ¾ÆÀÌµğ³ª ´Ğ³×ÀÓÀ» key·Î 1´ë1 °ÔÀÓÀ» ¸¸µå´Â classÀÔ´Ï´Ù.
+ * ìƒëŒ€ë°©ì˜ ì•„ì´ë””ë‚˜ ë‹‰ë„¤ì„ì„ keyë¡œ 1ëŒ€1 ê²Œì„ì„ ë§Œë“œëŠ” classì…ë‹ˆë‹¤.
  * */
 import java.awt.*;
 import java.awt.event.*;
@@ -44,17 +44,17 @@ public class createGame extends CFrame{
 		mainWindow.add(userNamePane, BorderLayout.NORTH);
 		mainWindow.add(buttonPane, BorderLayout.SOUTH);
 		
-		//»ó´ë userÀÇ ÀÌ¸§À» ÀÛ¼ºÇÏ´Â ÀÛ¼º¶õ
+		//ìƒëŒ€ userì˜ ì´ë¦„ì„ ì‘ì„±í•˜ëŠ” ì‘ì„±ë€
 		JTextField userName = new JTextField("Enter room number");
 		userName.setColumns(20);
 		userNamePane.add(userName);
 		JButton enter = new JButton("Enter Game");
 		userNamePane.add(enter);
 		
-		//¹æÀ» ¸¸µå´Â ¹öÆ°
+		//ë°©ì„ ë§Œë“œëŠ” ë²„íŠ¼
 		JButton create = new JButton("Create Game");
 		buttonPane.add(create);
-		//¹æÀ» ¸¸µå´Â ÀÛ¾÷À» ÁßÁöÇÏ°í waitingÀ¸·Î µ¹¾Æ°¡´Â ¹öÆ°
+		//ë°©ì„ ë§Œë“œëŠ” ì‘ì—…ì„ ì¤‘ì§€í•˜ê³  waitingìœ¼ë¡œ ëŒì•„ê°€ëŠ” ë²„íŠ¼
 
 		JButton cancle = new JButton("Cancel");
 		buttonPane.add(cancle);

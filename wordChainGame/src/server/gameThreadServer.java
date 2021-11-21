@@ -24,7 +24,7 @@ public class gameThreadServer extends Thread{
 	private gameRoom room = null;
 	private DBServer DB = null;
 	
-	//¼­¹ö¸¦ »ı¼ºÇÒ¶§ socketÀ» ¹Ş¾Æ streamÀ» establishÇÕ´Ï´Ù.
+	//ì„œë²„ë¥¼ ìƒì„±í• ë•Œ socketì„ ë°›ì•„ streamì„ establishí•©ë‹ˆë‹¤.
 	public gameThreadServer(Socket socket, gameRoom room)
 	{
 		this.socket = socket;
@@ -56,24 +56,24 @@ public class gameThreadServer extends Thread{
 				System.out.println("Received : " + req);
 				if(req == null)
 				{
-					System.out.println("Å¬¶óÀÌ¾ğÆ®¿Í ¿¬°áÀÌ ²÷°å½À´Ï´Ù");
+					System.out.println("í´ë¼ì´ì–¸íŠ¸ì™€ ì—°ê²°ì´ ëŠê²¼ìŠµë‹ˆë‹¤");
 					break;
 				}
 				
 				String[] tokens = null;
 				tokens = req.split(":");
-				//ÅÏÀÌ ³¡³µÀ½
+				//í„´ì´ ëë‚¬ìŒ
 				if("turnOver".equalsIgnoreCase(tokens[0]))
 				{
 					sendMessage("isYourTurn");
 					tokens = null;
 				}
-				//½Ã°£ÃÊ°ú
+				//ì‹œê°„ì´ˆê³¼
 				else if("end".equalsIgnoreCase(tokens[0]))
 				{
 					room.broadcast("end");
 					tokens = null;
-					//¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡°Ô °ÔÀÓ Á¾·á end response
+					//ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ì—ê²Œ ê²Œì„ ì¢…ë£Œ end response
 				}
 				else if("answer".equalsIgnoreCase(tokens[0]))
 				{
@@ -83,19 +83,19 @@ public class gameThreadServer extends Thread{
 					srcPlayer = tokens[3];
 					
 					room.broadcast("src:" + srcPlayer + ":" + ans);
-						//Á¤´äÀÎ°æ¿ì
+						//ì •ë‹µì¸ê²½ìš°
 						if(prev.charAt(prev.length() - 1) == ans.charAt(0) || prev.equalsIgnoreCase("first"))
 						{
 							room.broadcast("correct:" + ans);
 						}
-						//¿À´äÀÎ°æ¿ì
+						//ì˜¤ë‹µì¸ê²½ìš°
 						else
 						{
 							room.broadcast("wrong");
 						}
 						tokens = null;
-					//1¹ø°ú 2¹ø ÅäÅ«¿¡¼­ ³¡¸»ÀÕ±â ¼º°øÇÏ¸é correct response
-					//Æ²·È´Ù¸é end response
+					//1ë²ˆê³¼ 2ë²ˆ í† í°ì—ì„œ ëë§ì‡ê¸° ì„±ê³µí•˜ë©´ correct response
+					//í‹€ë ¸ë‹¤ë©´ end response
 				}
 				else if("iWin".equalsIgnoreCase(tokens[0]))
 				{
@@ -103,7 +103,7 @@ public class gameThreadServer extends Thread{
 					query = "UPDATE userinfo SET win = win + 1 WHERE ID =?";
 					DB.updateScore(query, strId);
 					tokens = null;
-					//DB¿¡ tokens[1]À» ÀÌ¸§À¸·ÎÇÏ´Â ÇÃ·¹ÀÌ¾îÀÇ ½Â¸® Ä«¿îÆ® + 1
+					//DBì— tokens[1]ì„ ì´ë¦„ìœ¼ë¡œí•˜ëŠ” í”Œë ˆì´ì–´ì˜ ìŠ¹ë¦¬ ì¹´ìš´íŠ¸ + 1
 				}
 				else if("iLose".equalsIgnoreCase(tokens[0]))
 				{
@@ -112,7 +112,7 @@ public class gameThreadServer extends Thread{
 					query = "UPDATE userinfo SET lose = lose + 1 WHERE ID =?";
 					DB.updateScore(query, strId);
 					tokens = null;
-					//DB¿¡ tokens[1]À» ÀÌ¸§À¸·ÎÇÏ´Â ÇÃ·¹ÀÌ¾îÀÇ ÆĞ¹è Ä«¿îÆ® + 1
+					//DBì— tokens[1]ì„ ì´ë¦„ìœ¼ë¡œí•˜ëŠ” í”Œë ˆì´ì–´ì˜ íŒ¨ë°° ì¹´ìš´íŠ¸ + 1
 				}
 				else if("myName".equalsIgnoreCase(tokens[0]))
 				{
@@ -147,7 +147,7 @@ public class gameThreadServer extends Thread{
 				req = "";
 			}
 		}catch(IOException e) {
-			System.out.println(this.strId + "´ÔÀÌ °ÔÀÓ¿¡¼­ ³ª°¬½À´Ï´Ù.");
+			System.out.println(this.strId + "ë‹˜ì´ ê²Œì„ì—ì„œ ë‚˜ê°”ìŠµë‹ˆë‹¤.");
 		}
 	}
 	

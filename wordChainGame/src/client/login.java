@@ -129,19 +129,19 @@ public class login extends CFrame{
 					bw.flush();
 					result = br.readLine();
 					if(result.equals("FAL"))	{
-						JOptionPane.showMessageDialog(null, "ID¿Í ºñ¹Ğ¹øÈ£¸¦ È®ÀÎ ÈÄ ´Ù½Ã ½ÃµµÇØ ÁÖ¼¼¿ä.", "·Î±×ÀÎ ½ÇÆĞ", JOptionPane.ERROR_MESSAGE); 
+						JOptionPane.showMessageDialog(null, "IDì™€ ë¹„ë°€ë²ˆí˜¸ë¥¼ í™•ì¸ í›„ ë‹¤ì‹œ ì‹œë„í•´ ì£¼ì„¸ìš”.", "ë¡œê·¸ì¸ ì‹¤íŒ¨", JOptionPane.ERROR_MESSAGE); 
 					}
 					else if (result.substring(0, 3).equals("WEL")) {
 						
 						String resultTokens[] = result.split(" ");
 						id = new String(resultTokens[1]);
-						System.out.println("[·Î±×ÀÎ ¼º°ø] " + id + "·Î ·Î±×ÀÎ¿¡ ¼º°øÇß½À´Ï´Ù." );
-						waiting waitingSection = new waiting(socket, super.bw, super.br, id);	// ¿©±â¼­ ID´Â ´Ğ³×ÀÓÀÔ´Ï´Ù.
+						System.out.println("[ë¡œê·¸ì¸ ì„±ê³µ] " + id + "ë¡œ ë¡œê·¸ì¸ì— ì„±ê³µí–ˆìŠµë‹ˆë‹¤." );
+						waiting waitingSection = new waiting(socket, super.bw, super.br, id);	// ì—¬ê¸°ì„œ IDëŠ” ë‹‰ë„¤ì„ì…ë‹ˆë‹¤.
 						waitingSection.setWindow();
 						mainWindow.dispose();
 					}
 					else {
-						JOptionPane.showMessageDialog(null, "¾Ë ¼ö ¾ø´Â ¿À·ù.", "·Î±×ÀÎ ½ÇÆĞ", JOptionPane.ERROR_MESSAGE); 
+						JOptionPane.showMessageDialog(null, "ì•Œ ìˆ˜ ì—†ëŠ” ì˜¤ë¥˜.", "ë¡œê·¸ì¸ ì‹¤íŒ¨", JOptionPane.ERROR_MESSAGE); 
 					}
 				}
 				catch (Exception ex) {

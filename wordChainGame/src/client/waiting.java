@@ -1,6 +1,6 @@
 package client;
 /*
- * ÁÂÃø¿¡ Á¢¼ÓÀ¯Àú ¿ìÃø¿¡ ·©Å·À» Ç¥½ÃÇÏ°í Áß¾Ó¿¡ Ã¤ÆÃÃ¢À» ¸¸µé¾î µÎ¾ú½À´Ï´Ù.
+ * ì¢Œì¸¡ì— ì ‘ì†ìœ ì € ìš°ì¸¡ì— ë­í‚¹ì„ í‘œì‹œí•˜ê³  ì¤‘ì•™ì— ì±„íŒ…ì°½ì„ ë§Œë“¤ì–´ ë‘ì—ˆìŠµë‹ˆë‹¤.
  * */
 import java.awt.*;
 import java.awt.event.*;
@@ -63,7 +63,7 @@ public class waiting extends CFrame{
 		userList.setEditable(false);
 		userList.setColumns(20);
 		userList.setRows(50);
-		//Ã¤ÆÃÃ¢
+		//ì±„íŒ…ì°½
 		JTextArea chatBox = new JTextArea();
 		chatBox.setEditable(false);
 		chatBox.setColumns(50);
@@ -72,11 +72,11 @@ public class waiting extends CFrame{
 		ranking.setEditable(false);
 		ranking.setColumns(20);
 		ranking.setRows(50);
-		//Ã¤ÆÃ ÀÛ¼ºÃ¢
+		//ì±„íŒ… ì‘ì„±ì°½
 		JTextField chat = new JTextField();
-		//Ã¤ÆÃ Àü¼Û ¹öÆ°
+		//ì±„íŒ… ì „ì†¡ ë²„íŠ¼
 		JButton chatSubmit = new JButton("Submit");
-		//°ÔÀÓ roomÀ» ¸¸µå´Â ¹öÆ° -> createGame classÀÇ ±â´ÉÀ» ½ÇÇàÇÏ±âÀ§ÇÑ Æ®¸®°Å
+		//ê²Œì„ roomì„ ë§Œë“œëŠ” ë²„íŠ¼ -> createGame classì˜ ê¸°ëŠ¥ì„ ì‹¤í–‰í•˜ê¸°ìœ„í•œ íŠ¸ë¦¬ê±°
 		JButton createGame = new JButton("Make room");
 		
 		descriptionPane.add(description, BorderLayout.NORTH);

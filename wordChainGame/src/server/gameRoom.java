@@ -3,7 +3,7 @@ package server;
 import java.util.ArrayList;
 
 /*
- * game room classÀÔ´Ï´Ù. °¢ roomÀÇ Á¤¿øÀº 2¸íÀÌ
+ * game room classì…ë‹ˆë‹¤. ê° roomì˜ ì •ì›ì€ 2ëª…ì´
  * */
 public class gameRoom extends gameRoomManager{
 	ArrayList<gameThreadServer> list = new ArrayList<gameThreadServer>();
@@ -15,14 +15,14 @@ public class gameRoom extends gameRoomManager{
 	{
 		this.manager = manager;
 	}
-	//user°¡ Á÷Á¢ÀûÀ¸·Î ¼ÒÅëÇÏ´Â gameThreadServer¸¦ room¿¡ Ãß°¡
+	//userê°€ ì§ì ‘ì ìœ¼ë¡œ ì†Œí†µí•˜ëŠ” gameThreadServerë¥¼ roomì— ì¶”ê°€
 	public void enterRoom(gameThreadServer server)
 	{
 		list.add(server);
 		userNumber++;
 		roomNumber = manager.getRoomNumber(this);
 		
-		if(userNumber % 2 == 0)//¹æ¿¡ ¹æÀåÀÌ ¾Æ´Ñ ÇÃ·¹ÀÌ¾î°¡ µé¾î°£ °æ¿ì
+		if(userNumber % 2 == 0)//ë°©ì— ë°©ì¥ì´ ì•„ë‹Œ í”Œë ˆì´ì–´ê°€ ë“¤ì–´ê°„ ê²½ìš°
 		{
 			gameThreadServer tempServer = list.get(0);
 			tempServer.sendMessage("otherCame");
@@ -56,9 +56,9 @@ public class gameRoom extends gameRoomManager{
 		userNumber--;
 		
 		if (isDelete) {
-			System.out.println(server.getID() + " Client Á¦°Å");
+			System.out.println(server.getID() + " Client ì œê±°");
 		} else {
-			System.out.println(server.getID() + " Client Á¦°Å ½ÇÆĞ");
+			System.out.println(server.getID() + " Client ì œê±° ì‹¤íŒ¨");
 		}
 		
 		if(userNumber < 1)

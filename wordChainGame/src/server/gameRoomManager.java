@@ -2,15 +2,15 @@ package server;
 
 import java.util.ArrayList;
 /*
- * game roomµéÀ» °ü¸®ÇÏ´Â °ü¸® classÀÔ´Ï´Ù.
+ * game roomë“¤ì„ ê´€ë¦¬í•˜ëŠ” ê´€ë¦¬ classì…ë‹ˆë‹¤.
  * 
- * game roomÀº 0¹øºÎÅÍ ½ÃÀÛÇÏ¸ç 
+ * game roomì€ 0ë²ˆë¶€í„° ì‹œì‘í•˜ë©° 
  * */
 public class gameRoomManager {
 	private ArrayList<gameRoom> roomList = new ArrayList<gameRoom>();//game room list
 	private int roomNumber = 0;
 	
-	//room Ãß°¡
+	//room ì¶”ê°€
 	public void addRoom(gameRoom room)
 	{
 		roomList.add(room);

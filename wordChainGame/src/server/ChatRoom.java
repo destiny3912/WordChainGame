@@ -6,10 +6,10 @@ public class ChatRoom {
 	
 	public String display() {
 		String msg = "USR";
-		System.out.println("[ÇöÀç Á¢¼ÓÀÚ Á¤º¸] Á¢¼ÓÀÚ ¼ö : " + list.size());
+		System.out.println("[í˜„ì¬ ì ‘ì†ì ì •ë³´] ì ‘ì†ì ìˆ˜ : " + list.size());
 		
 		if (list.size() != 0) {
-			System.out.println("[Á¢¼ÓÇÑ Client ID]");
+			System.out.println("[ì ‘ì†í•œ Client ID]");
 			for (int i = 0; i < list.size(); i++) {
 				String userId = list.get(i).strId;
 				System.out.println(userId);
@@ -21,12 +21,12 @@ public class ChatRoom {
 		return msg;
 	}
 
-	// Client ¸¦ ArrayList ¿¡ Ãß°¡
+	// Client ë¥¼ ArrayList ì— ì¶”ê°€
 	public void enterRoom(Server server) {
 		list.add(server);
 	}
 
-	// Client ¿¡°Ô ¸Ş½ÃÁö Àü¼Û
+	// Client ì—ê²Œ ë©”ì‹œì§€ ì „ì†¡
 	public void broadCasting(String message) {
 		Server server = null;
 
@@ -36,13 +36,13 @@ public class ChatRoom {
 		}
 	}
 
-	// Client °¡ Ã¤ÆÃ¿¡¼­ ³ª°¥ ¶§
+	// Client ê°€ ì±„íŒ…ì—ì„œ ë‚˜ê°ˆ ë•Œ
 	public void exitRoom(Server server) {
 		boolean isDelete = list.remove(server);
 		if (isDelete) {
-			System.out.println(server.strId + " Client Á¦°Å");
+			System.out.println(server.strId + " Client ì œê±°");
 		} else {
-			System.out.println(server.strId + " Client Á¦°Å ½ÇÆĞ");
+			System.out.println(server.strId + " Client ì œê±° ì‹¤íŒ¨");
 		}
 	}
 }

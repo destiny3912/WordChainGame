@@ -32,12 +32,12 @@ public class ClientCore extends Thread {
 				msg = br.readLine();
 				String protocol = msg.substring(0, 3);
 				
-				// Ã¤ÆÃ ¼ö½ÅÀÇ °æ¿ì
+				// ì±„íŒ… ìˆ˜ì‹ ì˜ ê²½ìš°
 				if(protocol.equals("MSG"))	{
 					chatBox.append(msg.substring(4) + "\n");
 				}
 				
-				//	»ç¿ëÀÚ ¸®½ºÆ®¸¦ ¹Ş´Â °æ¿ì
+				//	ì‚¬ìš©ì ë¦¬ìŠ¤íŠ¸ë¥¼ ë°›ëŠ” ê²½ìš°
 				else if(protocol.equals("USR"))	{
 					String[] users = msg.substring(4).split(" ");					
 					userList.setText("");

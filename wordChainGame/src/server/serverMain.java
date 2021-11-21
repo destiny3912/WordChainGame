@@ -14,36 +14,36 @@ public class serverMain {
 		ChatRoom room = null;
 		Server server = null;
 		gameServer GServer = null;
-		int portNumber = 3000; // port ¹øÈ£
+		int portNumber = 3000; // port ë²ˆí˜¸
 		
 		gameRoomManager roomList = new gameRoomManager();
 		
 		try {
 
-			// 1. MultiChatRoom °´Ã¤ »ı¼º
+			// 1. MultiChatRoom ê°ì±„ ìƒì„±
 			room = new ChatRoom();
 
-			// 2. portNumber ¸¦ ±â¹İÀ¸·Î ÇÏ´Â ¼ÒÄÏ »ı¼º
+			// 2. portNumber ë¥¼ ê¸°ë°˜ìœ¼ë¡œ í•˜ëŠ” ì†Œì¼“ ìƒì„±
 			serverSocket = new ServerSocket(portNumber);
-			System.out.println("[Server ÁØºñ ¿Ï·á]");
-			System.out.println("[Game Server ´ë±â]");
-			//game server ½º·¹µå ³»º¸³»±â
+			System.out.println("[Server ì¤€ë¹„ ì™„ë£Œ]");
+			System.out.println("[Game Server ëŒ€ê¸°]");
+			//game server ìŠ¤ë ˆë“œ ë‚´ë³´ë‚´ê¸°
 			GServer = new gameServer(roomList);
 			GServer.start();
 			
-			// Server À¯Áö
+			// Server ìœ ì§€
 			while (true) {
 
-				// 3. ClientÀÇ ¿¬°á¿äÃ» ´ë±â, ¿¬°áµÇ¸é Client Socket ÀÌ ¸¸µé¾îÁü
+				// 3. Clientì˜ ì—°ê²°ìš”ì²­ ëŒ€ê¸°, ì—°ê²°ë˜ë©´ Client Socket ì´ ë§Œë“¤ì–´ì§
 				socket = serverSocket.accept();
-				System.out.println("[¿¬°á]" + socket.getInetAddress());
+				System.out.println("[ì—°ê²°]" + socket.getInetAddress());
 
-				// 4. Á¢¼ÓµÈ Client ¸¦ ArrayList¿¡ ÀúÀå
-				// Ã¤ÆÃ °´Ã¼ »ı¼ºt
+				// 4. ì ‘ì†ëœ Client ë¥¼ ArrayListì— ì €ì¥
+				// ì±„íŒ… ê°ì²´ ìƒì„±t
 				server = new Server(socket, room, roomList);
-				// Thread ÀÛµ¿½ÃÄÑ 1)·Î±×ÀÎ Ã³¸® 2)Ã¤ÆÃ ½ÃÀÛ
+				// Thread ì‘ë™ì‹œì¼œ 1)ë¡œê·¸ì¸ ì²˜ë¦¬ 2)ì±„íŒ… ì‹œì‘
 				server.start();
-				// Ã¤ÆÃ °´Ã¼¸¦ ArrayList¿¡ ÀúÀå
+				// ì±„íŒ… ê°ì²´ë¥¼ ArrayListì— ì €ì¥
 				room.enterRoom(server);
 			}
 

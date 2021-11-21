@@ -11,11 +11,11 @@ import java.net.UnknownHostException;
 import javax.swing.JFrame;
 
 /*
- * ClientÀÇ ±â´ÉÀ» ½ÇÇàÇÏ´Â ½ÇÁú ·¯³Ê Å¬·¡½ºÀÔ´Ï´Ù.
+ * Clientì˜ ê¸°ëŠ¥ì„ ì‹¤í–‰í•˜ëŠ” ì‹¤ì§ˆ ëŸ¬ë„ˆ í´ë˜ìŠ¤ì…ë‹ˆë‹¤.
  * 
- * ¹æÀ» ¸¸µå´Â Å¬¶óÀÌ¾ğÆ®´Â createGameÈ­¸é¿¡¼­ createGameRoom ¹öÆ°À»
- * ¸¸µé¾îÁø ¹æ¿¡ µé¾î°£ Å¬¶óÀÌ¾ğÆ®´Â ´ëÈ­»óÀÚ¿¡ ¹æ ¹øÈ£¸¦ ÀÔ·ÂÇÏ°í enterRoom ¹öÆ°À» ´©¸£¸é µË´Ï´Ù.
- * Å×½ºÆ®½Ã ¹æ ¹øÈ£´Â 0¹ø ÀÔ´Ï´Ù.
+ * ë°©ì„ ë§Œë“œëŠ” í´ë¼ì´ì–¸íŠ¸ëŠ” createGameí™”ë©´ì—ì„œ createGameRoom ë²„íŠ¼ì„
+ * ë§Œë“¤ì–´ì§„ ë°©ì— ë“¤ì–´ê°„ í´ë¼ì´ì–¸íŠ¸ëŠ” ëŒ€í™”ìƒìì— ë°© ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ê³  enterRoom ë²„íŠ¼ì„ ëˆ„ë¥´ë©´ ë©ë‹ˆë‹¤.
+ * í…ŒìŠ¤íŠ¸ì‹œ ë°© ë²ˆí˜¸ëŠ” 0ë²ˆ ì…ë‹ˆë‹¤.
  * */
 public class clientMain {
 	public static void main(String[] args) {
@@ -42,7 +42,7 @@ public class clientMain {
 			loginSection = new login(socket, new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),new BufferedReader(new InputStreamReader(socket.getInputStream())));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("ÀÎÅÍ³İ »óÅÂ¸¦ È®ÀÎÇØ ÁÖ¼¼¿ä.");
+			System.out.println("ì¸í„°ë„· ìƒíƒœë¥¼ í™•ì¸í•´ ì£¼ì„¸ìš”.");
 			e.printStackTrace();
 		}
 		loginSection.setWindow();

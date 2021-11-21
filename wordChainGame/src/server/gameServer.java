@@ -15,7 +15,7 @@ public class gameServer extends Thread
 	ServerSocket serverSocket = null;
 	gameRoomManager roomList;
 	gameThreadServer server = null;
-	int portNumber = 3100; // port ¹øÈ£
+	int portNumber = 3100; // port ë²ˆí˜¸
 	int clientNumber = -1;
 	int roomNumber = -1;
 	private BufferedReader br = null;
@@ -29,28 +29,28 @@ public class gameServer extends Thread
 	public void run()
 	{
 		try {
-			// portNumber ¸¦ ±â¹İÀ¸·Î ÇÏ´Â ¼ÒÄÏ »ı¼º
+			// portNumber ë¥¼ ê¸°ë°˜ìœ¼ë¡œ í•˜ëŠ” ì†Œì¼“ ìƒì„±
 			serverSocket = new ServerSocket(portNumber);
-			System.out.println("[Game Server ÁØºñ ¿Ï·á]");
+			System.out.println("[Game Server ì¤€ë¹„ ì™„ë£Œ]");
 
-			// Server À¯Áö
+			// Server ìœ ì§€
 			while (true) 
 			{
 
-				// ClientÀÇ ¿¬°á¿äÃ» ´ë±â, ¿¬°áµÇ¸é Client Socket ÀÌ ¸¸µé¾îÁü
+				// Clientì˜ ì—°ê²°ìš”ì²­ ëŒ€ê¸°, ì—°ê²°ë˜ë©´ Client Socket ì´ ë§Œë“¤ì–´ì§
 				socket = serverSocket.accept();
-				System.out.println("[Game Server ¿¬°á]" + socket.getInetAddress());
+				System.out.println("[Game Server ì—°ê²°]" + socket.getInetAddress());
 				
 				clientNumber++;
 				
-				// ¸¸µé¾îÁø ¹æ¿¡ µé¾î°¡´Â Å¬¶óÀÌ¾ğÆ®ÀÇ ¿äÃ»ÀÏ°æ¿ì
+				// ë§Œë“¤ì–´ì§„ ë°©ì— ë“¤ì–´ê°€ëŠ” í´ë¼ì´ì–¸íŠ¸ì˜ ìš”ì²­ì¼ê²½ìš°
 				if(clientNumber % 2 != 0)
 				{
 					server = new gameThreadServer(socket, roomList.getRoom(++roomNumber));
 					roomList.getRoom(roomNumber).enterRoom(server);
 					server.start();
 				}
-				//¹æÀ» ¸¸µé¾î µé¾î°¡´Â Å¬¶óÀÌ¾ğÆ®ÀÇ ¿äÃ»ÀÏ°æ¿ì
+				//ë°©ì„ ë§Œë“¤ì–´ ë“¤ì–´ê°€ëŠ” í´ë¼ì´ì–¸íŠ¸ì˜ ìš”ì²­ì¼ê²½ìš°
 				else
 				{
 					gameRoom room = new gameRoom(roomList);
