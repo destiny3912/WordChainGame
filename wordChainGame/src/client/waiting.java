@@ -19,7 +19,7 @@ public class waiting extends CFrame{
 	private static final long serialVersionUID = 1L;
 	private JFrame mainWindow = new JFrame();
 	private String id = null;
-	private Socket socket = null;
+	private Socket socket = null; 
 	
 	public waiting(Socket socket, BufferedWriter bw, BufferedReader br, String id) {
 		// TODO Auto-generated constructor stub
