@@ -70,7 +70,7 @@ public class game extends CFrame{
 		mainWindow.setTitle("Game");
 		mainWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		mainWindow.setLayout(new BorderLayout());//(3, 1));
-		
+		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Header		
 		
 		headerPanel.setLayout(new GridLayout(1, 3));
@@ -151,6 +151,15 @@ public class game extends CFrame{
 				chatForm.append(playerName + " : " + chatString + "\n");
 				
 				sendMsg(chatString + ":" + playerName, "chatText");
+			}
+		});
+		//클라이언트 종료버튼
+		exitBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				System.exit(0);
 			}
 		});
 		
