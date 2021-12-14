@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 
 import javax.swing.JFrame;
 
@@ -19,7 +21,14 @@ import javax.swing.JFrame;
  * */
 public class clientMain {
 	public static void main(String[] args) {
-		
+		System.setProperty("file.encoding","UTF-8");
+		try{
+		Field charset = Charset.class.getDeclaredField("defaultCharset");
+		charset.setAccessible(true);
+		charset.set(null,null);
+		}
+		catch(Exception e){ }
+
 		Socket socket = null;
 		String ipNumber = "61.105.41.195";
 		int portNumber = 3000;

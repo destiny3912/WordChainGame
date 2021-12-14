@@ -2,13 +2,23 @@ package server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.Charset;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 
 public class serverMain {
 	public static void main(String[] args) {
+		System.setProperty("file.encoding","UTF-8");
+		try{
+		Field charset = Charset.class.getDeclaredField("defaultCharset");
+		charset.setAccessible(true);
+		charset.set(null,null);
+		}
+		
+		catch(Exception e){ }
 		Socket socket = null;
 		ServerSocket serverSocket = null;
 		ChatRoom room = null;
