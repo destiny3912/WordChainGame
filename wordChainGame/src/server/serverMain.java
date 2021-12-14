@@ -8,9 +8,10 @@ import java.net.Socket;
 import java.nio.charset.Charset;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
-
+ 
 public class serverMain {
 	public static void main(String[] args) {
+		//encoding 문제 해결위한 text encoding 고정 구문
 		System.setProperty("file.encoding","UTF-8");
 		try{
 		Field charset = Charset.class.getDeclaredField("defaultCharset");

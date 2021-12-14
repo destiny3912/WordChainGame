@@ -11,9 +11,8 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 
 import javax.swing.JFrame;
-
 /*
- * Client의 기능을 실행하는 실질 러너 클래스입니다.
+ * client의 기능을 실행하는 실질 러너 클래스입니다.
  * 
  * 방을 만드는 클라이언트는 createGame화면에서 createGameRoom 버튼을
  * 만들어진 방에 들어간 클라이언트는 대화상자에 방 번호를 입력하고 enterRoom 버튼을 누르면 됩니다.
@@ -21,6 +20,7 @@ import javax.swing.JFrame;
  * */
 public class clientMain {
 	public static void main(String[] args) {
+		//encoding 문제 해결위한 text encoding 고정 구문
 		System.setProperty("file.encoding","UTF-8");
 		try{
 		Field charset = Charset.class.getDeclaredField("defaultCharset");
