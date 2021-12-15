@@ -378,7 +378,7 @@ public class game extends CFrame{
 						{
 							if(!playerName.equalsIgnoreCase(tokens[2]))
 							{
-								chatMsgForm.append(tokens[2] + " : " + tokens[1] + "\n");
+								chatForm.append(tokens[2] + " : " + tokens[1] + "\n");
 							}
 						}
 						//서버에서 자신의 전적을 받아오는 경우
